@@ -99,7 +99,7 @@ export async function solveTurnstile(siteKey?: string): Promise<string> {
     const label = document.createElement("p");
     label.className = "hp-turnstile-label";
     label.textContent =
-      "Quick check to confirm you're human. This is automatic for most visitors and only appears once per session.";
+      "Быстрая проверка на человечность. Она автоматическая для большинства пользователей и появляется только один раз за сессию.";
     const host = document.createElement("div");
     host.className = "hp-turnstile-widget";
     card.appendChild(label);

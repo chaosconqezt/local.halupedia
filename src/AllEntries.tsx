@@ -76,7 +76,7 @@ export function AllEntries({ onNavigate }: Props) {
   }, []);
 
   useEffect(() => {
-    document.title = "All entries — Halupedia";
+    document.title = "Все статьи — Halupedia";
     fetchPage(null, false);
   }, [fetchPage]);
 
@@ -107,18 +107,17 @@ export function AllEntries({ onNavigate }: Props) {
   return (
     <div className="all-entries">
       <header className="all-entries-header">
-        <h1>All entries</h1>
+        <h1>Все статьи</h1>
         <p className="all-entries-subtitle">
-          Every page that has ever been hallucinated, in alphabetical order.
-          New entries are dreamt on demand and join this register the moment
-          they are written.
+          Каждая страница, которая когда-либо была сгаллюцинирована, в алфавитном порядке.
+          Новые записи придумываются по запросу и попадают в этот реестр сразу после создания.
         </p>
         <p className="all-entries-total">
           {total === null
-            ? "Counting the volumes\u2026"
+            ? "Подсчитываю фолианты…"
             : `${total.toLocaleString()} ${
-                total === 1 ? "entry" : "entries"
-              } catalogued to date.`}
+                total === 1 ? "запись" : "записей"
+              } каталогизировано на данный момент.`}
         </p>
       </header>
 
@@ -126,7 +125,7 @@ export function AllEntries({ onNavigate }: Props) {
         <input
           type="search"
           className="all-entries-search"
-          placeholder="Filter by title or slug…"
+          placeholder="Фильтр по названию или ссылке…"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
           autoFocus
@@ -135,20 +134,20 @@ export function AllEntries({ onNavigate }: Props) {
           {loading
             ? "\u2014"
             : filter
-            ? `${filtered.length} matching`
-            : `${filtered.length}${complete ? "" : "+"} loaded`}
+            ? `${filtered.length} найдено`
+            : `${filtered.length}${complete ? "" : "+"} загружено`}
         </span>
       </div>
 
       {error && <div className="all-entries-error">{error}</div>}
 
       {loading ? (
-        <p className="all-entries-status">Compiling the register…</p>
+        <p className="all-entries-status">Составляю реестр…</p>
       ) : filtered.length === 0 ? (
         <p className="all-entries-empty">
           {filter
-            ? "No entries match that query."
-            : "No entries have been hallucinated yet."}
+            ? "Нет совпадений по этому запросу."
+            : "Пока не сгенерировано ни одной статьи."}
         </p>
       ) : (
         <div className="all-entries-groups">
@@ -179,7 +178,7 @@ export function AllEntries({ onNavigate }: Props) {
             onClick={() => fetchPage(cursor, true)}
             disabled={loadingMore}
           >
-            {loadingMore ? "Loading…" : "Load more"}
+            {loadingMore ? "Загрузка…" : "Загрузить еще"}
           </button>
         </div>
       )}

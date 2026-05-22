@@ -50,17 +50,17 @@ const INITIAL_VISIBLE_ROOTS = 5;
 function formatAge(ms: number): string {
   const diff = Math.max(0, Date.now() - ms);
   const s = Math.floor(diff / 1000);
-  if (s < 60) return `${s} second${s === 1 ? "" : "s"} ago`;
+  if (s < 60) return `${s} сек. назад`;
   const m = Math.floor(s / 60);
-  if (m < 60) return `${m} minute${m === 1 ? "" : "s"} ago`;
+  if (m < 60) return `${m} мин. назад`;
   const h = Math.floor(m / 60);
-  if (h < 24) return `${h} hour${h === 1 ? "" : "s"} ago`;
+  if (h < 24) return `${h} ч. назад`;
   const d = Math.floor(h / 24);
-  if (d < 30) return `${d} day${d === 1 ? "" : "s"} ago`;
+  if (d < 30) return `${d} дн. назад`;
   const mo = Math.floor(d / 30);
-  if (mo < 12) return `${mo} month${mo === 1 ? "" : "s"} ago`;
+  if (mo < 12) return `${mo} мес. назад`;
   const y = Math.floor(d / 365);
-  return `${y} year${y === 1 ? "" : "s"} ago`;
+  return `${y} г. назад`;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -100,9 +100,9 @@ function insertAndSort(
 type SortMode = "recommended" | "top" | "newest";
 
 const SORT_LABELS: Record<SortMode, string> = {
-  recommended: "Recommended",
-  top: "Top",
-  newest: "Newest",
+  recommended: "Рекомендуемые",
+  top: "Лучшие",
+  newest: "Новейшие",
 };
 
 /** Local re-sort for replies (children) — must match the server's logic in
@@ -340,13 +340,13 @@ export function Comments({ slug }: Props) {
   }, []);
 
   return (
-    <section className="comments" aria-label="Reader speculations">
+    <section className="comments" aria-label="Спекуляции читателей">
       <header className="comments-header">
-        <h2>Reader speculations</h2>
+        <h2>Спекуляции читателей</h2>
         <span className="comments-count">
           {loading
             ? "—"
-            : `${serverTotal} entr${serverTotal === 1 ? "y" : "ies"}`}
+            : `${serverTotal} ${serverTotal === 1 ? "запись" : "записей"}`}
         </span>
         <div className="comments-sort" role="tablist" aria-label="Sort comments">
           {(Object.keys(SORT_LABELS) as SortMode[]).map((mode) => (
@@ -367,15 +367,15 @@ export function Comments({ slug }: Props) {
       {/* Identity strip — only shown after a user has been minted. */}
       {user && (
         <div className="comments-identity">
-          <span className="comments-identity-label">Posting as</span>
+          <span className="comments-identity-label">Публикация от лица</span>
           <span className="comments-identity-name">{user.name}</span>
           <span className="comments-identity-handle">@{user.username}</span>
         </div>
       )}
       {!user && !loading && (
         <p className="comments-identity-hint">
-          You have no name yet. One will be assigned to you on first comment;
-          you cannot choose it.
+          У вас еще нет имени. Оно будет назначено вам после первого комментария;
+          вы не можете выбрать его сами.
         </p>
       )}
 
@@ -385,17 +385,17 @@ export function Comments({ slug }: Props) {
         onChange={setDraft}
         onSubmit={submitTopLevel}
         submitting={submitting}
-        placeholder="Add to the record. Speculation encouraged; citations optional."
-        submitLabel="Submit entry"
+        placeholder="Пополните хронику. Спекуляции приветствуются; сноски по желанию."
+        submitLabel="Опубликовать"
       />
 
       {error && <div className="comments-error">{error}</div>}
 
       {loading ? (
-        <p className="comments-status">Consulting the marginalia…</p>
+        <p className="comments-status">Сверяюсь с маргиналиями…</p>
       ) : comments.length === 0 ? (
         <p className="comments-empty">
-          No reader has yet commented on this entry.
+          Ни один читатель еще не прокомментировал этот фолиант.
         </p>
       ) : (
         <>
@@ -432,8 +432,8 @@ export function Comments({ slug }: Props) {
                       className="comment-link"
                       onClick={() => setExpanded(true)}
                     >
-                      Expand ({hiddenCount} more
-                      {hasMore ? " loaded" : ""})
+                      Развернуть (еще {hiddenCount}
+                      {hasMore ? " загружено" : ""})
                     </button>
                   </div>
                 )}
@@ -448,8 +448,8 @@ export function Comments({ slug }: Props) {
                 disabled={loadingMore}
               >
                 {loadingMore
-                  ? "Fetching more marginalia…"
-                  : `Load more (${rootsTotal - comments.length} remaining)`}
+                  ? "Загружаем дополнительные маргиналии…"
+                  : `Загрузить еще (осталось ${rootsTotal - comments.length})`}
               </button>
             </div>
           )}
@@ -505,9 +505,9 @@ function CommentNode({
         <button
           className={`vote ${comment.voted ? "voted" : ""}`}
           onClick={() => toggleVote(comment.id)}
-          aria-label={comment.voted ? "Remove upvote" : "Upvote"}
+          aria-label={comment.voted ? "Снять голос" : "Проголосовать"}
           aria-pressed={comment.voted}
-          title={comment.voted ? "Retract upvote" : "Upvote"}
+          title={comment.voted ? "Отозвать голос" : "Проголосовать"}
         >
           <span className="vote-arrow" aria-hidden>▲</span>
         </button>
@@ -518,7 +518,7 @@ function CommentNode({
               className="comment-collapse"
               onClick={() => toggleCollapse(comment.id)}
               aria-expanded={!isCollapsed}
-              title={isCollapsed ? "Expand" : "Collapse"}
+              title={isCollapsed ? "Развернуть" : "Свернуть"}
             >
               [{isCollapsed ? "+" : "–"}]
             </button>
@@ -528,7 +528,7 @@ function CommentNode({
             <span className="comment-handle">@{comment.user.username}</span>
             <span className="sep">·</span>
             <span className="comment-score">
-              {comment.score} point{comment.score === 1 ? "" : "s"}
+              {comment.score} очк.
             </span>
             <span className="sep">·</span>
             <span className="comment-age">{formatAge(comment.created_at)}</span>
@@ -536,7 +536,7 @@ function CommentNode({
               <>
                 <span className="sep">·</span>
                 <span className="comment-collapsed-count">
-                  ({childCount} hidden)
+                  ({childCount} скрыто)
                 </span>
               </>
             )}
@@ -552,7 +552,7 @@ function CommentNode({
                     setReplyTo(replyTo === comment.id ? null : comment.id)
                   }
                 >
-                  {replyTo === comment.id ? "cancel" : "reply"}
+                  {replyTo === comment.id ? "отмена" : "ответить"}
                 </button>
               </footer>
 
@@ -562,8 +562,8 @@ function CommentNode({
                   onChange={setReplyDraft}
                   onSubmit={() => submitReply(comment.id)}
                   submitting={submitting}
-                  placeholder="A measured rejoinder…"
-                  submitLabel="Submit reply"
+                  placeholder="Обдуманный ответ…"
+                  submitLabel="Ответить"
                   compact
                 />
               )}
@@ -651,14 +651,14 @@ function CommentComposer({
           className={`comment-counter ${remaining < 0 ? "over" : ""}`}
           aria-live="polite"
         >
-          {remaining} chars left
+          осталось {remaining} симв.
         </span>
         <button
           className="comment-submit"
           onClick={onSubmit}
           disabled={submitting || value.trim().length === 0}
         >
-          {submitting ? "Filing…" : submitLabel}
+          {submitting ? "Отправка…" : submitLabel}
         </button>
       </div>
     </div>

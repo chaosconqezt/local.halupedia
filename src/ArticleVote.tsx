@@ -121,7 +121,7 @@ export function ArticleVote({ slug, onVoted }: Props) {
         disabled={pending}
         aria-pressed={voted}
         title={
-          voted ? "Retract endorsement" : "Endorse this folio"
+          voted ? "Отозвать голос" : "Одобрить этот фолиант"
         }
       >
         <span className="article-vote-arrow" aria-hidden>
@@ -130,7 +130,7 @@ export function ArticleVote({ slug, onVoted }: Props) {
         <span className="article-vote-count">{score}</span>
       </button>
       <span className="article-vote-label">
-        {voted ? "Endorsed" : "Endorse"}
+        {voted ? "Одобрено" : "Одобрить"}
       </span>
       {error && (
         <span className="article-vote-error" role="alert">

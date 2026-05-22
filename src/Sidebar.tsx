@@ -163,9 +163,9 @@ function ReaderCard({
   if (!LOGGED_IN) {
     return (
       <section className="sb-panel sb-reader sb-reader-guest">
-        <h3 className="sb-heading">The Reader</h3>
+        <h3 className="sb-heading">Читатель</h3>
         <p className="sb-reader-intro">
-          You are perusing the register anonymously.
+          Вы просматриваете реестр анонимно.
         </p>
         <button
           type="button"
@@ -174,10 +174,10 @@ function ReaderCard({
             /* mock — real impl will trigger identity hallucination */
           }}
         >
-          Sign the register
+          Подписать реестр
         </button>
         <p className="sb-fineprint">
-          A name will be drawn for you. No password. No e-mail. No fuss.
+          Имя будет выбрано для вас. Никаких паролей и e-mail.
         </p>
         {showFellowReaders && <FellowReadersLine n={others!} />}
       </section>
@@ -185,8 +185,8 @@ function ReaderCard({
   }
 
   return (
-    <section className="sb-panel sb-reader" aria-label="Your reader card">
-      <h3 className="sb-heading">The Reader</h3>
+    <section className="sb-panel sb-reader" aria-label="Ваша карточка читателя">
+      <h3 className="sb-heading">Читатель</h3>
       <a
         href={`/reader/${MOCK_USER.username}`}
         className="sb-reader-name"
@@ -200,12 +200,12 @@ function ReaderCard({
       <div className="sb-reader-handle">@{MOCK_USER.username}</div>
       <dl className="sb-reader-stats">
         <div>
-          <dt>Karma</dt>
+          <dt>Карма</dt>
           <dd>{MOCK_USER.karma.toLocaleString()}</dd>
         </div>
         <div>
-          <dt>Standing</dt>
-          <dd>Junior Archivist</dd>
+          <dt>Статус</dt>
+          <dd>Младший архивариус</dd>
         </div>
       </dl>
       {showFellowReaders && <FellowReadersLine n={others!} />}
@@ -218,13 +218,12 @@ function FellowReadersLine({ n }: { n: number }) {
     <p className="sb-fellow-readers" aria-live="polite">
       <span className="sb-fellow-dot" aria-hidden="true" />
       {n === 0 ? (
-        <>You alone are consulting this folio at present.</>
+        <>Только вы изучаете этот фолиант в данный момент.</>
       ) : n === 1 ? (
-        <>One other reader consults this folio at present.</>
+        <>Еще один читатель изучает этот фолиант прямо сейчас.</>
       ) : (
         <>
-          <strong>{n.toLocaleString()}</strong> others consult this folio at
-          present.
+          Еще <strong>{n.toLocaleString()}</strong> читают этот фолиант прямо сейчас.
         </>
       )}
     </p>
@@ -249,7 +248,7 @@ function TopArticlesPanel({
   return (
     <section className="sb-panel" aria-labelledby="sb-top-h">
       <h3 className="sb-heading" id="sb-top-h">
-        Top Folios
+        Лучшие фолианты
       </h3>
       <ol className="sb-list sb-list-numbered">
         {items.map((item, i) => {
@@ -268,7 +267,7 @@ function TopArticlesPanel({
               </a>
               <span
                 className="sb-score"
-                title={`${item.score} endorsement${item.score === 1 ? "" : "s"}`}
+                title={`${item.score} голосов`}
               >
                 ▲{item.score}
               </span>
@@ -299,7 +298,7 @@ function CurrentlyReadPanel({
   return (
     <section className="sb-panel" aria-labelledby="sb-now-h">
       <h3 className="sb-heading" id="sb-now-h">
-        Currently Being Consulted
+        Читают прямо сейчас
       </h3>
       <ol className="sb-list sb-list-numbered">
         {items.map((item, i) => {
@@ -318,7 +317,7 @@ function CurrentlyReadPanel({
               </a>
               <span
                 className="sb-score"
-                title={`${item.count} reader${item.count === 1 ? "" : "s"} right now`}
+                title={`${item.count} читателей`}
               >
                 {item.count}
               </span>
@@ -327,7 +326,7 @@ function CurrentlyReadPanel({
         })}
       </ol>
       <p className="sb-fineprint sb-now-fineprint">
-        Counts refreshed every few seconds.
+        Обновляется каждые несколько секунд.
       </p>
     </section>
   );
@@ -339,7 +338,7 @@ function BacklinksPanel({ onNavigate }: { onNavigate: (s: string) => void }) {
   return (
     <section className="sb-panel" aria-labelledby="sb-cited-h">
       <h3 className="sb-heading" id="sb-cited-h">
-        Cited by
+        Ссылаются
       </h3>
       <ul className="sb-list sb-list-plain">
         {MOCK_BACKLINKS.map((item) => (
@@ -366,7 +365,7 @@ function FeaturedPanel({ onNavigate }: { onNavigate: (s: string) => void }) {
   return (
     <section className="sb-panel sb-featured" aria-labelledby="sb-featured-h">
       <h3 className="sb-heading" id="sb-featured-h">
-        Today&rsquo;s Curiosity
+        В фокусе
       </h3>
       <a
         href={`/${MOCK_FEATURED.slug}`}
@@ -389,10 +388,10 @@ function PatronagePanel() {
   return (
     <section className="sb-panel sb-patron" aria-labelledby="sb-patron-h">
       <h3 className="sb-heading" id="sb-patron-h">
-        Patronage
+        Поддержка
       </h3>
       <p className="sb-patron-blurb">
-        The press runs on tokens. Patrons keep it printing.
+        Печатный станок работает на токенах.
       </p>
       <a
         href="https://buymeacoffee.com/baderbc"
@@ -400,7 +399,7 @@ function PatronagePanel() {
         rel="noopener noreferrer"
         className="sb-cta sb-cta-outline"
       >
-        Buy us tokens →
+        Купить нам токенов →
       </a>
       <SolanaTipJar />
       <a
@@ -409,7 +408,7 @@ function PatronagePanel() {
         rel="noopener noreferrer"
         className="sb-discord-link"
       >
-        Join Discord
+        Присоединиться к Discord
       </a>
     </section>
   );
@@ -433,16 +432,16 @@ function SolanaTipJar() {
 
   return (
     <div className="sb-solana" aria-label="Solana wallet address">
-      <span className="sb-solana-label">or send SOL</span>
+      <span className="sb-solana-label">или отправить SOL</span>
       <button
         type="button"
         className="sb-solana-addr"
         onClick={onCopy}
-        title="Copy Solana address"
+        title="Копировать адрес Solana"
       >
         <code>{SOLANA_ADDRESS}</code>
         <span className="sb-solana-copy" aria-live="polite">
-          {copied ? "copied" : "copy"}
+          {copied ? "скопировано" : "копировать"}
         </span>
       </button>
     </div>

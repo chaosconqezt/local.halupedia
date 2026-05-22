@@ -110,14 +110,14 @@ export function Admin() {
   return (
     <section className="admin-panel" aria-label="Admin panel">
       <header className="admin-header">
-        <h1>Admin</h1>
+        <h1>Админ-панель</h1>
         {auth && (
           <button
             type="button"
             className="admin-logout"
             onClick={onLogout}
           >
-            Log out
+            Выйти
           </button>
         )}
       </header>
@@ -199,7 +199,7 @@ function LoginForm({ onSuccess }: { onSuccess: (authHeader: string) => void }) {
   return (
     <form className="admin-login" onSubmit={onSubmit}>
       <label className="admin-field">
-        <span>Username</span>
+        <span>Логин</span>
         <input
           type="text"
           autoComplete="username"
@@ -210,7 +210,7 @@ function LoginForm({ onSuccess }: { onSuccess: (authHeader: string) => void }) {
         />
       </label>
       <label className="admin-field">
-        <span>Password</span>
+        <span>Пароль</span>
         <input
           type="password"
           autoComplete="current-password"
@@ -221,7 +221,7 @@ function LoginForm({ onSuccess }: { onSuccess: (authHeader: string) => void }) {
       </label>
       {error && <p className="admin-error">{error}</p>}
       <button type="submit" className="admin-submit" disabled={submitting}>
-        {submitting ? "Checking…" : "Sign in"}
+        {submitting ? "Проверка…" : "Войти"}
       </button>
     </form>
   );
@@ -290,18 +290,17 @@ function BanForm({
 
   return (
     <div className="admin-section">
-      <h2>Ban a slug</h2>
+      <h2>Забанить статью</h2>
       <p className="admin-section-blurb">
-        Comprehensive nuke. Wipes the article HTML, comments, votes, score
-        row, and live-presence entry. The slug is added to the moderation
-        ban list so any future regeneration request returns the redacted
-        notice.
+        Полное удаление. Стирает HTML-код статьи, комментарии, голоса и 
+        данные о чтении сейчас. Название добавляется в черный список, 
+        так что любые будущие запросы на регенерацию будут отклонены.
       </p>
       <form className="admin-ban-form" onSubmit={onSubmit}>
         <input
           type="text"
           className="admin-slug-input"
-          placeholder="slug-to-ban or 'Original Title'"
+          placeholder="slug-статьи или Оригинальное название"
           value={slug}
           onChange={(e) => setSlug(e.target.value)}
           disabled={submitting}
@@ -312,7 +311,7 @@ function BanForm({
           className="admin-submit admin-submit-danger"
           disabled={submitting || !slug.trim()}
         >
-          {submitting ? "Banning…" : "Ban"}
+          {submitting ? "Удаление…" : "Забанить"}
         </button>
       </form>
       {error && <p className="admin-error">{error}</p>}
@@ -325,30 +324,30 @@ function BanResultPanel({ result }: { result: BanResult }) {
   return (
     <div className="admin-result">
       <p className="admin-result-headline">
-        Banned <code>{result.slug}</code>.
+        Заблокировано: <code>{result.slug}</code>.
       </p>
       <ul className="admin-result-list">
         <li>
-          KV cache:{" "}
-          <strong>{result.was_cached ? "deleted" : "was not present"}</strong>
+          KV кэш:{" "}
+          <strong>{result.was_cached ? "удален" : "не найдено"}</strong>
         </li>
         <li>
-          Top Folios row:{" "}
+          Лучшие статьи:{" "}
           <strong>
-            {result.article_row_deleted ? "deleted" : "no row to delete"}
+            {result.article_row_deleted ? "удалено" : "не найдено"}
           </strong>{" "}
-          ({result.article_votes_deleted} article votes removed)
+          (голосов удалено: {result.article_votes_deleted})
         </li>
         <li>
-          Comments: <strong>{result.comments_deleted} removed</strong>{" "}
-          ({result.votes_deleted} comment votes removed)
+          Комментарии: <strong>удалено {result.comments_deleted}</strong>{" "}
+          (голосов удалено: {result.votes_deleted})
         </li>
         <li>
-          Live presence:{" "}
+          Live-статус:{" "}
           <strong>
             {result.presence_notified
-              ? "notified — sidebars refreshed"
-              : "notify failed (DO unreachable?)"}
+              ? "уведомлен — сайдбары обновлены"
+              : "не удалось уведомить"}
           </strong>
         </li>
       </ul>
@@ -499,18 +498,13 @@ function EnrichForm({
 
   return (
     <div className="admin-section">
-      <h2>Enrich articles with images</h2>
+      <h2>Сгенерировать изображения в статьях</h2>
       <p className="admin-section-blurb">
-        Find articles with at least N upvotes, then run a plan-and-insert
-        pass on the selected ones. The LLM only describes WHERE to put
-        images and WHAT they should depict — the worker performs the
-        actual byte-level HTML edits and verifies that nothing outside
-        the new <code>&lt;img&gt;</code> tags changed. Images themselves
-        are generated lazily the first time a visitor loads them.
+        Обогатите выбранные статьи изображениями с помощью ИИ.
       </p>
       <form className="admin-enrich-form" onSubmit={onSearch}>
         <label className="admin-field">
-          <span>Minimum upvotes</span>
+          <span>Мин. голосов</span>
           <input
             type="number"
             min={0}
@@ -520,14 +514,14 @@ function EnrichForm({
           />
         </label>
         <button type="submit" className="admin-submit" disabled={searching || submitting}>
-          {searching ? "Searching…" : "Find articles"}
+          {searching ? "Поиск…" : "Найти статьи"}
         </button>
       </form>
 
       {error && <p className="admin-error">{error}</p>}
 
       {candidates && candidates.length === 0 && (
-        <p className="admin-empty">No articles meet that threshold.</p>
+        <p className="admin-empty">Нет статей с достаточным кол-вом голосов.</p>
       )}
 
       {candidates && candidates.length > 0 && (
@@ -548,11 +542,11 @@ function EnrichForm({
                     <code className="admin-candidate-slug">/{c.slug}</code>
                     <span className="admin-candidate-score">↑ {c.score}</span>
                     {c.has_images && (
-                      <span className="admin-candidate-flag">already enriched</span>
+                      <span className="admin-candidate-flag">уже с картинками</span>
                     )}
                     {c.missing && (
                       <span className="admin-candidate-flag admin-candidate-flag-warn">
-                        missing from KV
+                        нет в KV
                       </span>
                     )}
                   </label>
@@ -567,8 +561,8 @@ function EnrichForm({
             disabled={submitting || selected.size === 0}
           >
             {submitting
-              ? "Enriching…"
-              : `Enrich ${selected.size} selected`}
+              ? "Обогащение…"
+              : `Обогатить ${selected.size} выбранных`}
           </button>
         </>
       )}
@@ -576,18 +570,18 @@ function EnrichForm({
       {result && (
         <div className="admin-result">
           <p className="admin-result-headline">
-            Enriched {result.enriched} / {result.processed} article(s) —{" "}
-            <strong>{result.images_added}</strong> image rows created.
+            Обогащено {result.enriched} / {result.processed} —{" "}
+            <strong>{result.images_added}</strong> изображений добавлено.
           </p>
           <ul className="admin-result-list">
             {result.results.map((r) => (
               <li key={r.slug}>
                 <code>/{r.slug}</code>{" "}
                 {r.ok ? (
-                  <strong>+{r.images_added} images</strong>
+                  <strong>+{r.images_added} картинок</strong>
                 ) : (
                   <span className="admin-skipped">
-                    skipped: {r.skipped_reason || "unknown"}
+                    пропущено: {r.skipped_reason || "неизвестно"}
                   </span>
                 )}
               </li>

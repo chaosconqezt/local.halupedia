@@ -79,8 +79,8 @@ export function SearchResults({ q, onNavigate, onSearch }: Props) {
 
   useEffect(() => {
     document.title = q
-      ? `Search: ${q} — Halupedia`
-      : "Search — Halupedia";
+      ? `Поиск: ${q} — Halupedia`
+      : "Поиск — Halupedia";
   }, [q]);
 
   const onSubmit = useCallback(
@@ -169,11 +169,11 @@ export function SearchResults({ q, onNavigate, onSearch }: Props) {
   return (
     <div className="search-page">
       <header className="search-header">
-        <h1>Search</h1>
+        <h1>Поиск</h1>
         <p className="search-subtitle">
-          Existing entries are listed first. The rest are plausible titles the
-          encyclopedia hasn't yet committed to paper — click one and it will be
-          dreamt up on the spot.
+          Сначала показаны существующие статьи. Остальные — правдоподобные названия,
+          которые энциклопедия еще не перенесла на бумагу. Нажмите на одно из них,
+          чтобы оно придумалось на ходу.
         </p>
       </header>
 
@@ -181,7 +181,7 @@ export function SearchResults({ q, onNavigate, onSearch }: Props) {
         <input
           type="search"
           className="search-input"
-          placeholder="Search Halupedia…"
+          placeholder="Поиск по Халупедии…"
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           maxLength={100}
@@ -192,14 +192,13 @@ export function SearchResults({ q, onNavigate, onSearch }: Props) {
           className="search-submit"
           disabled={!draft.trim()}
         >
-          Search
+          Найти
         </button>
       </form>
 
       {!q && (
         <p className="search-hint">
-          Try a name, a place, a century, an obscure ritual — or anything at
-          all.
+          Попробуйте ввести имя, место, век, забытый ритуал — или вообще что угодно.
         </p>
       )}
 
@@ -207,8 +206,7 @@ export function SearchResults({ q, onNavigate, onSearch }: Props) {
 
       {q && loading && (
         <p className="search-status">
-          <span className="dot" /> Consulting the index and hallucinating
-          alternatives…
+          <span className="dot" /> Сверяюсь с индексом и галлюцинирую альтернативы…
         </p>
       )}
 
@@ -216,17 +214,16 @@ export function SearchResults({ q, onNavigate, onSearch }: Props) {
         <>
           {data.rate_limited && !data.needs_challenge && (
             <div className="search-ratelimit">
-              You've hit the search-suggestion rate limit. Showing only entries
-              already in the encyclopedia — no new hallucinations this round.
-              Try again later.
+              Вы достигли лимита поиска. Показаны только
+              статьи, которые уже есть в энциклопедии — в этот раз никаких новых галлюцинаций.
+              Попробуйте позже.
             </div>
           )}
 
           {data.needs_challenge && (
             <div className="search-ratelimit">
               <p style={{ margin: "0 0 0.5rem 0" }}>
-                AI suggestions are paused for this session pending a quick
-                human check.
+                Предложения ИИ приостановлены до выполнения быстрой проверки.
               </p>
               <button
                 type="button"
@@ -234,22 +231,22 @@ export function SearchResults({ q, onNavigate, onSearch }: Props) {
                 onClick={onVerify}
                 disabled={verifying}
               >
-                {verifying ? "Verifying…" : "Verify to unlock AI suggestions"}
+                {verifying ? "Проверка…" : "Подтвердить для разблокировки ИИ"}
               </button>
             </div>
           )}
 
           {data.results.length === 0 ? (
             <p className="search-empty">
-              Nothing in the register, and the encyclopedia declines to invent
-              anything new right now.
+              В реестре ничего не найдено, а энциклопедия отказывается придумывать
+              что-то новое прямо сейчас.
             </p>
           ) : (
             <div className="search-results">
               {existingResults.length > 0 && (
                 <section className="search-section">
                   <h2 className="search-section-title">
-                    In the encyclopedia
+                    В энциклопедии
                     <span className="search-section-count">
                       {existingResults.length}
                     </span>
@@ -272,7 +269,7 @@ export function SearchResults({ q, onNavigate, onSearch }: Props) {
               {unwrittenResults.length > 0 && (
                 <section className="search-section">
                   <h2 className="search-section-title">
-                    Not yet written
+                    Пока не написано
                     <span className="search-section-count">
                       {unwrittenResults.length}
                     </span>
@@ -286,7 +283,7 @@ export function SearchResults({ q, onNavigate, onSearch }: Props) {
                         <a
                           href={`/${r.slug}`}
                           onClick={(e) => onLinkClick(e, r.slug)}
-                          title="Not yet written — clicking will hallucinate it"
+                          title="Пока не написано — клик сгаллюцинирует это"
                         >
                           <span className="search-unwritten-mark" aria-hidden>
                             ✦

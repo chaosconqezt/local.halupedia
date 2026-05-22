@@ -18,11 +18,11 @@ const HOMEPAGE_SLUG = "halupedia";
 type Status = "idle" | "loading" | "streaming" | "done" | "error" | "banned";
 
 const DREAMING_MESSAGES = [
-  "Consulting seventeen conflicting sources…",
-  "Cross-referencing the index…",
-  "Locating the relevant volume…",
-  "Interviewing three anonymous experts…",
-  "Resolving a minor scholarly dispute…",
+  "Сверяюсь с семнадцатью противоречивыми источниками…",
+  "Сверяю перекрестные ссылки в индексе…",
+  "Ищу нужный том…",
+  "Опрашиваю трех анонимных экспертов…",
+  "Разрешаю мелкий научный спор…",
 ];
 
 function currentSlug(): string {
@@ -296,9 +296,9 @@ export function App() {
             target="_blank"
             rel="noopener noreferrer"
             className="brand-donate"
-            title="Donations go directly to LLM tokens so the press can keep printing."
+            title="Все пожертвования идут на токены LLM, чтобы мы могли продолжать работу."
           >
-            Buy us tokens →
+            Купить нам токенов →
           </a>
         </div>
         <nav className="nav">
@@ -309,7 +309,7 @@ export function App() {
               navigateTo("halupedia");
             }}
           >
-            Index
+            Главная
           </a>
           <a
             href="/all-entries"
@@ -318,7 +318,7 @@ export function App() {
               navigateTo("all-entries");
             }}
           >
-            All entries
+            Все статьи
           </a>
           <a
             href="#stumble"
@@ -327,7 +327,7 @@ export function App() {
               onStumble();
             }}
           >
-            Stumble
+            Случайная статья
           </a>
           <a
             href="https://github.com/BaderBC/halupedia"
@@ -367,18 +367,18 @@ export function App() {
             <input
               type="search"
               className="header-search-input"
-              placeholder="Search…"
+              placeholder="Поиск…"
               value={headerSearchDraft}
               onChange={(e) => setHeaderSearchDraft(e.target.value)}
               maxLength={100}
-              aria-label="Search Halupedia"
+              aria-label="Поиск по Халупедии"
             />
             <button
               type="submit"
               className="header-search-submit"
               disabled={!headerSearchDraft.trim()}
             >
-              Search
+              Найти
             </button>
           </form>
         )}
@@ -410,25 +410,25 @@ export function App() {
               {status === "streaming" && (
                 <div className="status">
                   <span className="dot" />
-                  <span>Retrieving entry…</span>
+                  <span>Получаю статью…</span>
                 </div>
               )}
               {status === "error" && error && (
                 <div className="error">
-                  Something broke, which is ironic for a made-up encyclopedia: {error}
+                  Что-то сломалось, что иронично для выдуманной энциклопедии: {error}
                 </div>
               )}
               {status === "banned" && (
                 <div className="banned-notice">
-                  <h1>Entry redacted</h1>
+                  <h1>Статья удалена</h1>
                   <p>
-                    This article was flagged by moderation and removed from the
-                    register. Halupedia will not regenerate it.
+                    Эта статья была заблокирована модерацией и удалена из реестра.
+                    Халупедия не будет ее генерировать заново.
                   </p>
                   <p className="banned-notice-meta">
-                    We keep the encyclopedia maximally absurd but draw the line
-                    at hate speech, slurs, incitement, and keyword-spam. If you
-                    believe this was removed in error, mention it in the{" "}
+                    Мы поддерживаем максимальную абсурдность энциклопедии, но проводим черту
+                    на языке вражды, оскорблениях, подстрекательствах и спаме. Если вы
+                    считаете, что это удалено по ошибке, напишите в{" "}
                     <a
                       href="https://discord.gg/fKMnyNwtGc"
                       target="_blank"
@@ -480,7 +480,7 @@ export function App() {
 
       <footer className="site-footer">
         <p className="footer-tagline-line">
-          Comprehensive coverage of topics mainstream encyclopedias overlooked.
+          Исчерпывающее освещение тем, которые упускают из виду традиционные энциклопедии.
         </p>
       </footer>
     </div>
