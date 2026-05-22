@@ -11,7 +11,40 @@ const DB_PATH = path.join(process.cwd(), ".data");
 
 if (!fs.existsSync(DB_PATH)) fs.mkdirSync(DB_PATH, { recursive: true });
 
+async function checkLLMApi() {
+    console.log("Checking LLM API connection...");
+    const baseUrl = process.env.OPENAI_BASE_URL || "https://openrouter.ai/api/v1";
+    const apiKey = process.env.OPENAI_API_KEY || process.env.OPENROUTER_API_KEY;
+    const model = process.env.LLM_MODEL || process.env.OPENAI_MODEL || "dummy";
+    
+    if (!apiKey || apiKey === "dummy") {
+        console.warn("\n⚠️ WARNING: No OPENAI_API_KEY or OPENROUTER_API_KEY provided in .env! Text generation will fail.");
+        return;
+    }
+
+    try {
+        const res = await fetch(`${baseUrl}/models`, {
+            headers: {
+                "Authorization": `Bearer ${apiKey}` // Required by most APIs
+            }
+        });
+        if (!res.ok) {
+            console.error(`\n❌ ERROR: LLM API returned ${res.status} ${res.statusText}`);
+            const text = await res.text().catch(() => "");
+            console.error(text);
+            console.error(`Please check your OPENAI_BASE_URL and API keys in .env\n`);
+        } else {
+            console.log(`✅ LLM API connection successful (${baseUrl}). Using model: ${model}`);
+        }
+    } catch (e: any) {
+        console.error(`\n❌ ERROR: Failed to connect to LLM API at ${baseUrl}`);
+        console.error(e.message);
+        console.error(`If you are using a local LLM, make sure it is running. Otherwise check your internet connection and .env settings.\n`);
+    }
+}
+
 async function startServer() {
+  await checkLLMApi();
   const expressApp = express();
 
   const mockKv = new LocalKV(path.join(DB_PATH, "kv.sqlite"));
@@ -90,8 +123,11 @@ async function startServer() {
         error TEXT
     );
     CREATE TABLE IF NOT EXISTS link_hints (
-        slug TEXT PRIMARY KEY,
-        blurb TEXT NOT NULL
+        target_slug TEXT NOT NULL,
+        source_slug TEXT NOT NULL,
+        blurb TEXT NOT NULL,
+        created_at INTEGER NOT NULL,
+        PRIMARY KEY (target_slug, source_slug)
     );
     CREATE TABLE IF NOT EXISTS admins (
         username TEXT PRIMARY KEY,
