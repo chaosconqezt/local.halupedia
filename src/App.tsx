@@ -291,15 +291,6 @@ export function App() {
           >
             Halu<span className="amp">&middot;</span>pedia
           </a>
-          <a
-            href="https://buymeacoffee.com/baderbc"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="brand-donate"
-            title="Все пожертвования идут на токены LLM, чтобы мы могли продолжать работу."
-          >
-            Купить нам токенов →
-          </a>
         </div>
         <nav className="nav">
           <a
@@ -328,29 +319,6 @@ export function App() {
             }}
           >
             Случайная статья
-          </a>
-          <a
-            href="https://github.com/BaderBC/halupedia"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GitHub
-          </a>
-          <a
-            href="https://reddit.com/r/halupedia"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="nav-reddit"
-          >
-            Reddit
-          </a>
-          <a
-            href="https://discord.gg/fKMnyNwtGc"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="nav-discord"
-          >
-            Discord
           </a>
         </nav>
 
@@ -428,15 +396,7 @@ export function App() {
                   <p className="banned-notice-meta">
                     Мы поддерживаем максимальную абсурдность энциклопедии, но проводим черту
                     на языке вражды, оскорблениях, подстрекательствах и спаме. Если вы
-                    считаете, что это удалено по ошибке, напишите в{" "}
-                    <a
-                      href="https://discord.gg/fKMnyNwtGc"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Discord
-                    </a>
-                    .
+                    считаете, что это удалено по ошибке, обратитесь к администратору сервера.
                   </p>
                 </div>
               )}

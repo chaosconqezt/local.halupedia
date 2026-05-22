@@ -1,10 +1,11 @@
 ВНИМАНИЕ! ЭТО НЕЙРОСЛОП!
 
-# Halupedia (Local Version)
+# Halupedia (Локализованная RU версия для локального использования)
 
-Halupedia is an AI-powered encyclopedia where every article is generated on-demand by Large Language Models (LLMs). This project was originally designed for Cloudflare Workers (using KV, D1, and R2), but has been fully ported to run **locally** using Node.js, Express, and SQLite.
+Это локализованный на русский язык форк оригинального проекта [Halupedia](https://github.com/BaderBC/halupedia). Проект адаптирован для запуска на вашем собственном оборудовании.
+Он предоставляет нейросетевую энциклопедию, где каждая статья генерируется по запросу большими языковыми моделями (LLM). Эта версия адаптирована для локального использования через Node.js, Express и SQLite, в отличие от оригинала, который работал на Cloudflare Workers.
 
-You can run Halupedia entirely on your own hardware using an OpenAI-compatible local AI server like [llama.cpp](https://github.com/ggerganov/llama.cpp) or vLLM, or you can connect it to OpenRouter / OpenAI.
+Собранная для работы с локальным AI-сервером через [llama.cpp](https://github.com/ggerganov/llama.cpp) или vLLM (либо с OpenRouter/OpenAI).
 
 ## Features
 
@@ -104,9 +105,19 @@ To run the production build:
 npm run start
 ```
 
-## Admin Access
+## Управление контентом и Админка / Модерация
 
-Halupedia includes a built-in admin panel at `/admin`. To log in, you will need to add a user to the `admins` table in the local D1 database (`.data/d1.sqlite`). Passwords are hashed using SHA-512.
+В Halupedia есть встроенная панель администратора по адресу `/admin`. 
+Для входа в нее вам нужно добавить пользователя в таблицу `admins` в локальной базе данных D1 (`.data/d1.sqlite`). Пароли хэшируются с использованием SHA-512 (можете добавить хэш пароля вручную).
+
+Через `/admin` вы можете **"Забанить статью" (Ban a slug)**:
+Это удалит HTML-код статьи, все голоса и комментарии, а также добавит slug (название статьи в ссылке) в черный список модерации. Любые будущие попытки сгенерировать заблокированную статью будут выдавать сообщение "Статья удалена" и предотвращать её повторное создание.
+
+**Как править контент вручную (базы данных):**
+Поскольку вся архитектура запущена локально в SQLite:
+- **KV Store (`.data/kv.sqlite`)**: содержит сгенерированный HTML статей (в таблице `kv`). Вы можете напрямую удалить или отредактировать HTML-тэг нужной статьи, найдя её по ключу.
+- **Главная БД (`.data/d1.sqlite`)**: содержит профили, лайки, комментарии профилей, связь ссылок (`link_hints`). Вы можете удалить бракованные ссылки, просто удалив соответствующие строки из таблицы `link_hints`.
+Управлять этими базами можно через любой инструмент для просмотра SQLite (DB Browser for SQLite, DBeaver, sqlite3-cli и т.д).
 
 ## Project Structure
 

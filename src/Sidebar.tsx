@@ -107,7 +107,6 @@ export function Sidebar({
       {/* Disabled until link_hints backlinks query is wired up.
           {_showBacklinks && <BacklinksPanel onNavigate={onNavigate} />} */}
       <FeaturedPanel onNavigate={onNavigate} />
-      <PatronagePanel />
     </aside>
   );
 }
@@ -379,71 +378,5 @@ function FeaturedPanel({ onNavigate }: { onNavigate: (s: string) => void }) {
       </a>
       <p className="sb-featured-blurb">{MOCK_FEATURED.blurb}</p>
     </section>
-  );
-}
-
-/* --- 5. Patronage ---------------------------------------------------- */
-
-function PatronagePanel() {
-  return (
-    <section className="sb-panel sb-patron" aria-labelledby="sb-patron-h">
-      <h3 className="sb-heading" id="sb-patron-h">
-        Поддержка
-      </h3>
-      <p className="sb-patron-blurb">
-        Печатный станок работает на токенах.
-      </p>
-      <a
-        href="https://buymeacoffee.com/baderbc"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="sb-cta sb-cta-outline"
-      >
-        Купить нам токенов →
-      </a>
-      <SolanaTipJar />
-      <a
-        href="https://discord.gg/fKMnyNwtGc"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="sb-discord-link"
-      >
-        Присоединиться к Discord
-      </a>
-    </section>
-  );
-}
-
-/** Small click-to-copy chip for the project's Solana wallet. Kept inline
- *  in the Patronage panel so it sits right next to the BMC button. */
-function SolanaTipJar() {
-  const [copied, setCopied] = useState(false);
-
-  const onCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(SOLANA_ADDRESS);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1500);
-    } catch {
-      // Clipboard API can fail on insecure contexts / older browsers.
-      // Falling back silently is fine — the address is visible on screen.
-    }
-  };
-
-  return (
-    <div className="sb-solana" aria-label="Solana wallet address">
-      <span className="sb-solana-label">или отправить SOL</span>
-      <button
-        type="button"
-        className="sb-solana-addr"
-        onClick={onCopy}
-        title="Копировать адрес Solana"
-      >
-        <code>{SOLANA_ADDRESS}</code>
-        <span className="sb-solana-copy" aria-live="polite">
-          {copied ? "скопировано" : "копировать"}
-        </span>
-      </button>
-    </div>
   );
 }
