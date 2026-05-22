@@ -2,8 +2,25 @@
  * Canonical slug normalization. Used by router, API, and post-cache href rewriting.
  * Must be deterministic and idempotent: slugify(slugify(x)) === slugify(x).
  */
+const CYRILLIC_MAP: Record<string, string> = {
+  а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ё: "yo", ж: "zh",
+  з: "z", и: "i", й: "y", к: "k", л: "l", м: "m", н: "n", о: "o",
+  п: "p", р: "r", с: "s", т: "t", у: "u", ф: "f", х: "h", ц: "ts",
+  ч: "ch", ш: "sh", щ: "sch", ъ: "", ы: "y", ь: "", э: "e", ю: "yu",
+  я: "ya",
+  А: "a", Б: "b", В: "v", Г: "g", Д: "d", Е: "e", Ё: "yo", Ж: "zh",
+  З: "z", И: "i", Й: "y", К: "k", Л: "l", М: "m", Н: "n", О: "o",
+  П: "p", Р: "r", С: "s", Т: "t", У: "u", Ф: "f", Х: "h", Ц: "ts",
+  Ч: "ch", Ш: "sh", Щ: "sch", Ъ: "", Ы: "y", Ь: "", Э: "e", Ю: "yu",
+  Я: "ya"
+};
+
+export function transliterate(text: string): string {
+  return text.split('').map(char => CYRILLIC_MAP[char] !== undefined ? CYRILLIC_MAP[char] : char).join('');
+}
+
 export function slugify(input: string): string {
-  return input
+  return transliterate(input)
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "") // strip combining diacritics
     .toLowerCase()
