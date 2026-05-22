@@ -81,12 +81,8 @@ export class LocalD1 {
         return stmt;
       },
       async all() {
-        try {
-            const results = db.prepare(query).all(...bindArgs);
-            return { success: true, results };
-        } catch (e: any) {
-             return { success: false, error: e.message, results: [] };
-        }
+        const results = db.prepare(query).all(...bindArgs);
+        return { success: true, results };
       },
       async first(colName?: string) {
         const result = db.prepare(query).get(...bindArgs);
@@ -95,12 +91,8 @@ export class LocalD1 {
         return result;
       },
       async run() {
-        try {
-            const info = db.prepare(query).run(...bindArgs);
-            return { success: true, meta: { changes: info.changes } };
-        } catch (e: any) {
-            return { success: false, error: e.message };
-        }
+        const info = db.prepare(query).run(...bindArgs);
+        return { success: true, meta: { changes: info.changes } };
       }
     };
     return stmt;

@@ -1,3 +1,5 @@
+ВНИМАНИЕ! ЭТО НЕЙРОСЛОП!
+
 # Halupedia (Local Version)
 
 Halupedia is an AI-powered encyclopedia where every article is generated on-demand by Large Language Models (LLMs). This project was originally designed for Cloudflare Workers (using KV, D1, and R2), but has been fully ported to run **locally** using Node.js, Express, and SQLite.

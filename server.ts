@@ -154,6 +154,7 @@ async function startServer() {
            res.end();
         }
     } catch (e: any) {
+        console.error("Hono crash:", e);
         res.status(500).send(e.message);
     }
   });

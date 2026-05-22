@@ -75,16 +75,24 @@ export async function streamGeneration(opts: GenerateOptions): Promise<ReadableS
   };
 
   const baseUrl = process.env.OPENAI_BASE_URL || "https://openrouter.ai/api/v1";
-  const res = await fetch(`${baseUrl}/chat/completions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${opts.apiKey}`,
-      "HTTP-Referer": "https://halupedia.com",
-      "X-Title": "Halupedia",
-    },
-    body: JSON.stringify(body),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${baseUrl}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${opts.apiKey}`,
+        "HTTP-Referer": "https://halupedia.com",
+        "X-Title": "Halupedia",
+      },
+      body: JSON.stringify(body),
+    });
+  } catch (err: any) {
+    console.error(`\n[LLM ERROR] Failed to connect to ${baseUrl}/chat/completions.`);
+    console.error(`If you are using a local LLM, make sure it is running (e.g. llama.cpp on port 8080).`);
+    console.error(`If you are using OpenRouter, check your .env settings.\nError details:`, err.message, `\n`);
+    throw err;
+  }
 
   if (!res.ok || !res.body) {
     const errText = await res.text().catch(() => "");
