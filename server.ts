@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import path from "path";
 import fs from "fs";
@@ -69,8 +70,7 @@ async function startServer() {
   }
 
   // Create tables for D1 since D1 expects them
-  const sqlite = mockD1 as any;
-  sqlite.exec(`
+  await mockD1.exec(`
     CREATE TABLE IF NOT EXISTS articles (
         slug TEXT PRIMARY KEY,
         title TEXT NOT NULL,
@@ -134,6 +134,26 @@ async function startServer() {
         password_sha512 TEXT NOT NULL
     );
   `);
+
+  try {
+      // Check if old schema exists
+      const cols = await mockD1.prepare("PRAGMA table_info(link_hints)").all() as any;
+      if (cols.results && cols.results.length > 0 && !cols.results.find((c: any) => c.name === "target_slug")) {
+          // Drop and recreate because primary key changed from slug to (target_slug, source_slug)
+          await mockD1.exec("DROP TABLE link_hints");
+          await mockD1.exec(`
+            CREATE TABLE link_hints (
+                target_slug TEXT NOT NULL,
+                source_slug TEXT NOT NULL,
+                blurb TEXT NOT NULL,
+                created_at INTEGER NOT NULL,
+                PRIMARY KEY (target_slug, source_slug)
+            );
+          `);
+      }
+  } catch(e) {
+      // Ignore
+  }
   
   // Inject mock environments into hono via middleware
   expressApp.use(async (req, res, next) => {
