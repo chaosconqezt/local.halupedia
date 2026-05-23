@@ -368,6 +368,7 @@ export function createAdminApp() {
     }
     const admin = await verifyAdmin(c.env.DB, creds.user, creds.pass);
     if (!admin) {
+      console.log('auth fail: wrong username or password', creds.user, creds.pass);
       await bumpLoginFailure(c.env.ARTICLES, ip);
       return c.json({ error: "unauthorized" }, 401);
     }
