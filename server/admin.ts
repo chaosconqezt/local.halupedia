@@ -409,22 +409,55 @@ export function createAdminApp() {
 
   app.get("/api/admin/articles-list", async (c) => {
     const sort = c.req.query("sort") || "date"; // "date" or "name"
-    const order = sort === "name" ? "ASC" : "DESC";
-    const orderBy = sort === "name" ? "title" : "created_at";
-
-    let rows: Array<{ slug: string; title: string; score: number; created_at: number; }> = [];
+    
+    let allKeys: Array<{ slug: string; title: string; generatedAt: number; }> = [];
     try {
-      const r = await c.env.DB
-        .prepare(
-          `SELECT slug, title, score, created_at FROM articles ORDER BY ${orderBy} ${order} LIMIT 500`
-        )
-        .all<{ slug: string; title: string; score: number; created_at: number; }>();
-      rows = r.results ?? [];
+      let cursor: string | undefined;
+      while (true) {
+        const page = await c.env.ARTICLES.list<{ title?: string; generatedAt?: number }>({ cursor, limit: 1000 });
+        for (const k of page.keys) {
+          if (k.name.startsWith("__") || k.name.startsWith("search:") || k.name.startsWith("enrich_run:")) continue;
+          
+          allKeys.push({ 
+            slug: k.name, 
+            title: (k.metadata as any)?.title || k.name,
+            generatedAt: (k.metadata as any)?.generatedAt || 0,
+          });
+        }
+        if (page.list_complete) break;
+        cursor = (page as any).cursor;
+        if (!cursor) break;
+      }
     } catch (e) {
       console.error("admin: articles-list failed", e);
       return c.json({ error: "query failed" }, 500);
     }
-    return c.json({ articles: rows });
+    
+    // Now get the scores from D1.
+    let scores = new Map<string, number>();
+    try {
+      const r = await c.env.DB.prepare(`SELECT slug, score FROM articles`).all<{slug: string, score: number}>();
+      for (const row of r.results ?? []) {
+        scores.set(row.slug, row.score);
+      }
+    } catch (e) {
+      // Ignore if it fails
+    }
+
+    let rows = allKeys.map(k => ({
+      slug: k.slug,
+      title: k.title.replace(/_/g, " "),
+      score: scores.get(k.slug) || 0,
+      created_at: k.generatedAt,
+    }));
+
+    if (sort === "name") {
+      rows.sort((a, b) => a.title.localeCompare(b.title));
+    } else {
+      rows.sort((a, b) => b.created_at - a.created_at);
+    }
+
+    return c.json({ articles: rows.slice(0, 500) });
   });
 
   /** List articles with score >= ?min=N. Used by the admin UI to pick
