@@ -407,6 +407,26 @@ export function createAdminApp() {
   /*  Image enrichment                                                 */
   /* ---------------------------------------------------------------- */
 
+  app.get("/api/admin/articles-list", async (c) => {
+    const sort = c.req.query("sort") || "date"; // "date" or "name"
+    const order = sort === "name" ? "ASC" : "DESC";
+    const orderBy = sort === "name" ? "title" : "created_at";
+
+    let rows: Array<{ slug: string; title: string; score: number; created_at: number; }> = [];
+    try {
+      const r = await c.env.DB
+        .prepare(
+          `SELECT slug, title, score, created_at FROM articles ORDER BY ${orderBy} ${order} LIMIT 500`
+        )
+        .all<{ slug: string; title: string; score: number; created_at: number; }>();
+      rows = r.results ?? [];
+    } catch (e) {
+      console.error("admin: articles-list failed", e);
+      return c.json({ error: "query failed" }, 500);
+    }
+    return c.json({ articles: rows });
+  });
+
   /** List articles with score >= ?min=N. Used by the admin UI to pick
    *  which articles to enrich. Includes a flag indicating whether the
    *  article already has images (so the UI can warn / skip). */

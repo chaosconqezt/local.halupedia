@@ -125,24 +125,51 @@ export function Admin() {
       {!auth ? (
         <LoginForm onSuccess={(h) => { storeAuth(h); setAuth(h); }} />
       ) : (
-        <>
-          <BanForm
-            authHeader={auth}
-            onAuthExpired={() => {
-              storeAuth(null);
-              setAuth(null);
-            }}
-          />
-          <EnrichForm
-            authHeader={auth}
-            onAuthExpired={() => {
-              storeAuth(null);
-              setAuth(null);
-            }}
-          />
-        </>
+        <AdminTabs 
+          authHeader={auth}
+          onAuthExpired={() => {
+            storeAuth(null);
+            setAuth(null);
+          }}
+        />
       )}
     </section>
+  );
+}
+
+function AdminTabs({ authHeader, onAuthExpired }: { authHeader: string; onAuthExpired: () => void }) {
+  const [activeTab, setActiveTab] = useState<"ban" | "enrich" | "list">("list");
+  
+  return (
+    <div>
+      <div style={{ display: "flex", gap: "1rem", borderBottom: "1px solid #ccc", marginBottom: "1rem", paddingBottom: "0.5rem" }}>
+        <button 
+          type="button"
+          onClick={() => setActiveTab("list")}
+          style={{ fontWeight: activeTab === "list" ? "bold" : "normal", cursor: "pointer", background: "none", border: "none", fontSize: "1.1rem" }}
+        >
+          Список статей
+        </button>
+        <button 
+          type="button"
+          onClick={() => setActiveTab("ban")}
+          style={{ fontWeight: activeTab === "ban" ? "bold" : "normal", cursor: "pointer", background: "none", border: "none", fontSize: "1.1rem" }}
+        >
+          Удаление (Вручную)
+        </button>
+        <button 
+          type="button"
+          onClick={() => setActiveTab("enrich")}
+          style={{ fontWeight: activeTab === "enrich" ? "bold" : "normal", cursor: "pointer", background: "none", border: "none", fontSize: "1.1rem" }}
+        >
+          Генерация изображений
+        </button>
+      </div>
+      
+      {activeTab === "ban" && <BanForm authHeader={authHeader} onAuthExpired={onAuthExpired} />}
+      {activeTab === "enrich" && <EnrichForm authHeader={authHeader} onAuthExpired={onAuthExpired} />}
+      {activeTab === "list" && <ArticlesListForm authHeader={authHeader} onAuthExpired={onAuthExpired} />}
+    </div>
   );
 }
 
@@ -588,6 +615,135 @@ function EnrichForm({
             ))}
           </ul>
         </div>
+      )}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Articles list form                                                        */
+/* -------------------------------------------------------------------------- */
+
+function ArticlesListForm({
+  authHeader,
+  onAuthExpired,
+}: {
+  authHeader: string;
+  onAuthExpired: () => void;
+}) {
+  const [sort, setSort] = useState<"date" | "name">("date");
+  const [loading, setLoading] = useState(false);
+  const [articles, setArticles] = useState<Array<{ slug: string; title: string; score: number; created_at: number }>>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchArticles = useCallback(async (currentSort: "date" | "name") => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await adminFetch(authHeader, `/api/admin/articles-list?sort=${currentSort}`);
+      if (res.status === 401) {
+        onAuthExpired();
+        return;
+      }
+      if (!res.ok) {
+        throw new Error(`Failed to fetch articles (${res.status})`);
+      }
+      const data = await res.json();
+      setArticles(data.articles || []);
+    } catch (err: any) {
+      setError(err?.message || "Network error.");
+    } finally {
+      setLoading(false);
+    }
+  }, [authHeader, onAuthExpired]);
+
+  useEffect(() => {
+    fetchArticles(sort);
+  }, [sort, fetchArticles]);
+
+  const onDelete = useCallback(
+    async (slug: string) => {
+      if (!window.confirm(`Вы уверены что хотите удалить статью "${slug}"?\n\nОна будет стерта из базы навсегда.`)) {
+        return;
+      }
+      try {
+        const res = await adminFetch(authHeader, "/api/admin/ban", {
+          method: "POST",
+          body: JSON.stringify({ slug }),
+        });
+        if (res.status === 401) {
+          onAuthExpired();
+          return;
+        }
+        if (!res.ok) {
+          const j: any = await res.json().catch(() => ({}));
+          throw new Error(j?.error || `Ban failed (${res.status}).`);
+        }
+        // Success
+        setArticles((prev) => prev.filter((a) => a.slug !== slug));
+      } catch (err: any) {
+        alert("Ошибка при удалении: " + (err?.message || "Неизвестная ошибка"));
+      }
+    },
+    [authHeader, onAuthExpired]
+  );
+
+  return (
+    <div className="admin-section">
+      <h2>Список всех статей (последние 500)</h2>
+      <div style={{ marginBottom: "1rem", fontSize: "1rem" }}>
+        <span style={{ marginRight: "1rem" }}>Сортировка:</span>
+        <label style={{ marginRight: "1rem", cursor: "pointer" }}>
+          <input
+            type="radio"
+            name="sort"
+            value="date"
+            checked={sort === "date"}
+            onChange={() => setSort("date")}
+          />
+          {" "}По дате (сначала новые)
+        </label>
+        <label style={{ cursor: "pointer" }}>
+          <input
+            type="radio"
+            name="sort"
+            value="name"
+            checked={sort === "name"}
+            onChange={() => setSort("name")}
+          />
+          {" "}По алфавиту
+        </label>
+      </div>
+
+      {error && <p className="admin-error">{error}</p>}
+      
+      {loading && <p>Загрузка...</p>}
+      
+      {!loading && articles.length === 0 && <p className="admin-empty">Статей нет.</p>}
+      
+      {!loading && articles.length > 0 && (
+        <ul className="admin-candidates">
+          {articles.map((a) => (
+            <li key={a.slug} className="admin-candidate" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ padding: "0.5rem 0", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <span className="admin-candidate-title">{a.title}</span> 
+                <code className="admin-candidate-slug">/{a.slug}</code>
+                <span className="admin-candidate-score">↑ {a.score}</span>
+                <span style={{ fontSize: "0.8rem", color: "#666", marginLeft: "12px", display: "inline-block" }}>
+                  {new Date(a.created_at).toLocaleString()}
+                </span>
+              </div>
+              <button 
+                type="button" 
+                className="admin-submit admin-submit-danger" 
+                style={{ marginLeft: "1rem", padding: "4px 12px", width: "auto" }}
+                onClick={() => onDelete(a.slug)}
+              >
+                Удалить
+              </button>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
