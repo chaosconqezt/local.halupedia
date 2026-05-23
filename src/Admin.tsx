@@ -726,10 +726,10 @@ function ArticlesListForm({
           {articles.map((a) => (
             <li key={a.slug} className="admin-candidate" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div style={{ padding: "0.5rem 0", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                <span className="admin-candidate-title">{a.title}</span> 
-                <code className="admin-candidate-slug">/{a.slug}</code>
-                <span className="admin-candidate-score">↑ {a.score}</span>
-                <span style={{ fontSize: "0.8rem", color: "#666", marginLeft: "12px", display: "inline-block" }}>
+                <span className="admin-candidate-title" style={{ marginRight: "8px" }}>{a.title}</span> 
+                <code className="admin-candidate-slug" style={{ marginRight: "12px", color: "#555" }}>/{a.slug}</code>
+                <span className="admin-candidate-score" style={{ fontWeight: "bold" }}>↑ {a.score}</span>
+                <span style={{ fontSize: "0.85rem", color: "#888", marginLeft: "16px", display: "inline-block" }}>
                   {new Date(a.created_at).toLocaleString()}
                 </span>
               </div>

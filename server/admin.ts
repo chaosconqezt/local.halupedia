@@ -37,7 +37,7 @@
  */
 
 import { Hono } from "hono";
-import { slugify } from "./slug";
+import { slugify, slugToTitle } from "./slug";
 import { clientIp } from "./ratelimit";
 import {
   planImageInsertions,
@@ -420,7 +420,7 @@ export function createAdminApp() {
           
           allKeys.push({ 
             slug: k.name, 
-            title: (k.metadata as any)?.title || k.name,
+            title: (k.metadata as any)?.title || slugToTitle(k.name),
             generatedAt: (k.metadata as any)?.generatedAt || 0,
           });
         }
