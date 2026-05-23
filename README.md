@@ -5,7 +5,7 @@
 Это полностью локализованный на русский язык форк справочного проекта [Halupedia](https://github.com/BaderBC/halupedia). Проект адаптирован для запуска на вашем собственном оборудовании.
 Он представляет собой нейросетевую энциклопедию, где каждая статья (и даже поисковые подсказки) генерируется прямо на ходу большими языковыми моделями (LLM). Эта версия специализирована для локального использования и работает на базе Node.js, Express и SQLite, в отличие от оригинальной версии, завязанной на экосистему Cloudflare (Workers, KV, D1, R2).
 
-Проект по умолчанию собирается под локальные открытые нейросети через API, совместимое с OpenAI (например, [llama.cpp](https://github.com/ggerganov/llama.cpp) или vLLM). Вы также можете использовать облачные сервисы (через OpenRouter, OpenAI или Google Gemini, если они поддерживают OpenAI-формат).
+Проект по умолчанию собирается под локальные открытые нейросети через API, совместимое с OpenAI (например, [llama.cpp](https://github.com/ggml-org/llama.cpp) или vLLM). Вы также можете использовать облачные сервисы (через OpenRouter, OpenAI или Google Gemini, если они поддерживают OpenAI-формат).
 
 ## Особенности (Нейрослоп)
 - **100% Галлюцинации:** Статьи, их краткое содержание, связанные темы и поисковая выдача динамически придумываются нейросетью на основе запросов и ссылок.
@@ -90,7 +90,7 @@ npm run start
 This is a globally localized Russian fork of the original [Halupedia](https://github.com/BaderBC/halupedia) project. It is adapted to strictly run on your own hardware. 
 It provides an AI-powered encyclopedia where every article (and search suggestions) are generated on-demand by Large Language Models (LLMs). This version is fully adapted to run locally using Node.js, Express, and SQLite, instead of relying on Cloudflare Workers.
 
-You can run this project locally using an OpenAI-compatible local AI server like [llama.cpp](https://github.com/ggerganov/llama.cpp) or vLLM, or you can connect it to OpenRouter / OpenAI.
+You can run this project locally using an OpenAI-compatible local AI server like [llama.cpp](https://github.com/ggml-org/llama.cpp) or vLLM, or you can connect it to OpenRouter / OpenAI.
 
 ### Features
 - **Fully AI-Generated:** Articles, summaries, and related topics are dynamically created by LLMs based on search queries and URL slugs.

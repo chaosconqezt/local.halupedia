@@ -4,8 +4,10 @@
  */
 export function slugify(input: string): string {
   return input
+    .normalize("NFC")
     .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "") // strip combining diacritics
+    .replace(/([a-zA-Z])[\u0300-\u036f]+/g, "$1") // strip combining diacritics ONLY from Latin
+    .normalize("NFC") // recombine Cyrillic (e.g. и + breve -> й)
     .toLowerCase()
     .replace(/['"`’]/g, "")
     .replace(/[^a-zа-яё0-9]+/g, "-")
@@ -24,6 +26,12 @@ export function slugToTitle(slug: string): string {
     "on", "or", "the", "to", "vs", "via", "with",
   ]);
   const words = slug.split("-").filter(Boolean);
+  
+  if (/[а-яё]/.test(slug)) {
+    const joined = words.join(" ");
+    return joined.charAt(0).toUpperCase() + joined.slice(1);
+  }
+
   return words
     .map((w, i) => {
       if (i !== 0 && small.has(w)) return w;
