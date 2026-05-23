@@ -34,7 +34,7 @@
    ```bash
    cp .env.example .env
    ```
-5. Отредактируйте `.env` и укажите данные вашей нейросети.
+5. Отредактируйте `.env` и укажите данные вашей нейросети. Здесь же можно настроить `HOST`, если вы хотите слушать только `127.0.0.1` или определенную подсеть (по умолчанию `0.0.0.0`).
 6. Запустите сервер профиля разработчика:
    ```bash
    npm run dev
@@ -91,6 +91,8 @@ This is a globally localized Russian fork of the original [Halupedia](https://gi
 It provides an AI-powered encyclopedia where every article (and search suggestions) are generated on-demand by Large Language Models (LLMs). This version is fully adapted to run locally using Node.js, Express, and SQLite, instead of relying on Cloudflare Workers.
 
 You can run this project locally using an OpenAI-compatible local AI server like [llama.cpp](https://github.com/ggml-org/llama.cpp) or vLLM, or you can connect it to OpenRouter / OpenAI.
+
+You can configure the network interface by setting `HOST` in your `.env` file (e.g., `HOST=127.0.0.1`). It defaults to `0.0.0.0`.
 
 ### Features
 - **Fully AI-Generated:** Articles, summaries, and related topics are dynamically created by LLMs based on search queries and URL slugs.

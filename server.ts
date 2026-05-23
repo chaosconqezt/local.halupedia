@@ -8,6 +8,7 @@ import honoApp from "./server/index.js";
 import { createServer as createViteServer } from "vite";
 
 const PORT = 3000;
+const HOST = process.env.HOST || "0.0.0.0";
 const DB_PATH = path.join(process.cwd(), ".data");
 
 if (!fs.existsSync(DB_PATH)) fs.mkdirSync(DB_PATH, { recursive: true });
@@ -245,8 +246,8 @@ async function startServer() {
     });
   }
 
-  expressApp.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  expressApp.listen(PORT, HOST, () => {
+    console.log(`Server running on http://${HOST}:${PORT} (and http://localhost:${PORT})`);
   });
 }
 
