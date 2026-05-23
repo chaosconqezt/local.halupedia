@@ -53,6 +53,7 @@ export function App() {
   // article's presence broadcast.
   const [articleTitle, setArticleTitle] = useState<string>("");
   const prevSlugRef = useRef<string | null>(null);
+  const linkContextRef = useRef<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   /* ----- Popstate (back/forward) ----- */
@@ -103,7 +104,18 @@ export function App() {
     setDreamMsg(DREAMING_MESSAGES[Math.floor(Math.random() * DREAMING_MESSAGES.length)]);
 
     const from = prevSlugRef.current;
-    const url = `/api/page/${encodeURIComponent(slug)}${from ? `?from=${encodeURIComponent(from)}` : ""}`;
+    
+    // Grab the clicked paragraph context, and then clear it
+    const searchParams = new URLSearchParams();
+    if (from) {
+      searchParams.set("from", from);
+    }
+    if (linkContextRef.current) {
+      searchParams.set("linkContext", linkContextRef.current.substring(0, 1000));
+      linkContextRef.current = null;
+    }
+    const qStr = searchParams.toString();
+    const url = `/api/page/${encodeURIComponent(slug)}${qStr ? `?${qStr}` : ""}`;
 
     (async () => {
       try {
@@ -237,6 +249,13 @@ export function App() {
     if (!href || !href.startsWith("/")) return;
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || (e as any).button === 1) return;
     e.preventDefault();
+    
+    // Capture paragraph context
+    const block = target.closest("p, blockquote, li");
+    if (block) {
+      linkContextRef.current = block.textContent;
+    }
+    
     navigateTo(href.slice(1));
   }, []);
 

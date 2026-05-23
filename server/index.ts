@@ -613,12 +613,30 @@ app.get("/api/page/:slug", async (c) => {
 
   // 3. Fetch source context if `from` is present.
   let sourceContext: GenerateOptions["sourceContext"] = null;
-  if (fromSlug) {
-    const fromArticle = await c.env.ARTICLES.get(fromSlug, "json") as StoredArticle | null;
-    if (fromArticle) {
+  const linkContext = c.req.query("linkContext");
+  
+  if (fromSlug || linkContext) {
+    let fromTitleStr = "";
+    let fromSummaryStr = "";
+    
+    if (fromSlug) {
+      const fromArticle = await c.env.ARTICLES.get(fromSlug, "json") as StoredArticle | null;
+      if (fromArticle) {
+        fromTitleStr = fromArticle.title;
+        fromSummaryStr = fromArticle.summary;
+      }
+    }
+    
+    if (linkContext) {
+      fromSummaryStr = fromSummaryStr 
+        ? `${fromSummaryStr}\n\nКонтекст (абзац), из которого пользователь перешел по ссылке: "${linkContext}"`
+        : `Контекст (абзац), из которого пользователь перешел по ссылке: "${linkContext}"`;
+    }
+    
+    if (fromTitleStr || fromSummaryStr) {
       sourceContext = {
-        fromTitle: fromArticle.title,
-        fromSummary: fromArticle.summary,
+        fromTitle: fromTitleStr || "Неизвестная статья",
+        fromSummary: fromSummaryStr,
       };
     }
   }
