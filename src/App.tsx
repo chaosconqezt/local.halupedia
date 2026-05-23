@@ -119,6 +119,17 @@ export function App() {
         }
         const cachedHeader = res.headers.get("x-halupedia-cached");
         const isCached = cachedHeader === "true";
+        const contentType = res.headers.get("content-type");
+
+        if (contentType && contentType.includes("application/json")) {
+          const j = (await res.json()) as { redirect?: string };
+          if (cancelled) return;
+          if (j.redirect) {
+            // Strip leading slash if present
+            navigateTo(j.redirect.replace(/^\//, ""));
+            return;
+          }
+        }
 
         if (!res.body) {
           const text = await res.text();
