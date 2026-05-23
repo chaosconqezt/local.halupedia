@@ -13,8 +13,8 @@
  *   - Every admin API call carries `Authorization: Basic …`. A 401 anywhere
  *     drops us back to the login screen.
  *
- * The only privileged action wired up today is `ban`, which calls
- * /api/admin/ban. That endpoint comprehensively nukes a slug from
+ * The only privileged action wired up today is `delete`, which calls
+ * /api/admin/delete. That endpoint comprehensively nukes a slug from
  * everywhere it could be lingering (KV, articles, article_votes,
  * article_moderation, comments, votes, the __total counter, AND the
  * live Presence DO's "Currently Being Consulted" list). See
@@ -60,7 +60,7 @@ async function adminFetch(
   return fetch(path, { ...init, headers, credentials: "same-origin" });
 }
 
-interface BanResult {
+interface DeleteResult {
   slug: string;
   was_cached: boolean;
   comments_deleted: number;
@@ -138,7 +138,7 @@ export function Admin() {
 }
 
 function AdminTabs({ authHeader, onAuthExpired }: { authHeader: string; onAuthExpired: () => void }) {
-  const [activeTab, setActiveTab] = useState<"ban" | "enrich" | "list">("list");
+  const [activeTab, setActiveTab] = useState<"delete" | "enrich" | "list">("list");
   
   return (
     <div>
@@ -152,8 +152,8 @@ function AdminTabs({ authHeader, onAuthExpired }: { authHeader: string; onAuthEx
         </button>
         <button 
           type="button"
-          onClick={() => setActiveTab("ban")}
-          style={{ fontWeight: activeTab === "ban" ? "bold" : "normal", cursor: "pointer", background: "none", border: "none", fontSize: "1.1rem" }}
+          onClick={() => setActiveTab("delete")}
+          style={{ fontWeight: activeTab === "delete" ? "bold" : "normal", cursor: "pointer", background: "none", border: "none", fontSize: "1.1rem" }}
         >
           Удаление (Вручную)
         </button>
@@ -166,7 +166,7 @@ function AdminTabs({ authHeader, onAuthExpired }: { authHeader: string; onAuthEx
         </button>
       </div>
       
-      {activeTab === "ban" && <BanForm authHeader={authHeader} onAuthExpired={onAuthExpired} />}
+      {activeTab === "delete" && <DeleteForm authHeader={authHeader} onAuthExpired={onAuthExpired} />}
       {activeTab === "enrich" && <EnrichForm authHeader={authHeader} onAuthExpired={onAuthExpired} />}
       {activeTab === "list" && <ArticlesListForm authHeader={authHeader} onAuthExpired={onAuthExpired} />}
     </div>
@@ -255,10 +255,10 @@ function LoginForm({ onSuccess }: { onSuccess: (authHeader: string) => void }) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Ban form                                                                   */
+/*  Delete form                                                                   */
 /* -------------------------------------------------------------------------- */
 
-function BanForm({
+function DeleteForm({
   authHeader,
   onAuthExpired,
 }: {
@@ -268,7 +268,7 @@ function BanForm({
   const [slug, setSlug] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<BanResult | null>(null);
+  const [result, setResult] = useState<DeleteResult | null>(null);
 
   const onSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -281,7 +281,7 @@ function BanForm({
       // Mild client-side confirmation. Server normalises again anyway.
       if (
         !window.confirm(
-          `Ban "${cleaned}"?\n\nThis deletes the article HTML, all comments and votes for it, its score row, and removes it from the "Currently Being Consulted" panel for all live readers. The slug will be refused if regenerated.`
+          `Delete "${cleaned}"?\n\nThis deletes the article HTML, all comments and votes for it, its score row, and removes it from the "Currently Being Consulted" panel for all live readers. It can now be regenerated.`
         )
       ) {
         return;
@@ -290,7 +290,7 @@ function BanForm({
       setError(null);
       setResult(null);
       try {
-        const res = await adminFetch(authHeader, "/api/admin/ban", {
+        const res = await adminFetch(authHeader, "/api/admin/delete", {
           method: "POST",
           body: JSON.stringify({ slug: cleaned }),
         });
@@ -300,10 +300,10 @@ function BanForm({
         }
         if (!res.ok) {
           const j: any = await res.json().catch(() => ({}));
-          setError(j?.error || `Ban failed (${res.status}).`);
+          setError(j?.error || `Delete failed (${res.status}).`);
           return;
         }
-        const j = (await res.json()) as BanResult;
+        const j = (await res.json()) as DeleteResult;
         setResult(j);
         setSlug("");
       } catch (err: any) {
@@ -323,7 +323,7 @@ function BanForm({
         данные о чтении сейчас. Название добавляется в черный список, 
         так что любые будущие запросы на регенерацию будут отклонены.
       </p>
-      <form className="admin-ban-form" onSubmit={onSubmit}>
+      <form className="admin-delete-form" onSubmit={onSubmit}>
         <input
           type="text"
           className="admin-slug-input"
@@ -342,12 +342,12 @@ function BanForm({
         </button>
       </form>
       {error && <p className="admin-error">{error}</p>}
-      {result && <BanResultPanel result={result} />}
+      {result && <DeleteResultPanel result={result} />}
     </div>
   );
 }
 
-function BanResultPanel({ result }: { result: BanResult }) {
+function DeleteResultPanel({ result }: { result: DeleteResult }) {
   return (
     <div className="admin-result">
       <p className="admin-result-headline">
@@ -667,7 +667,7 @@ function ArticlesListForm({
         return;
       }
       try {
-        const res = await adminFetch(authHeader, "/api/admin/ban", {
+        const res = await adminFetch(authHeader, "/api/admin/delete", {
           method: "POST",
           body: JSON.stringify({ slug }),
         });
@@ -677,7 +677,7 @@ function ArticlesListForm({
         }
         if (!res.ok) {
           const j: any = await res.json().catch(() => ({}));
-          throw new Error(j?.error || `Ban failed (${res.status}).`);
+          throw new Error(j?.error || `Delete failed (${res.status}).`);
         }
         // Success
         setArticles((prev) => prev.filter((a) => a.slug !== slug));

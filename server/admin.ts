@@ -202,10 +202,10 @@ async function verifyAdmin(
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Ban helper — wipes a slug from every surface                              */
+/*  Delete helper — wipes a slug from every surface                           */
 /* -------------------------------------------------------------------------- */
 
-interface BanResult {
+interface DeleteResult {
   slug: string;
   was_cached: boolean;
   comments_deleted: number;
@@ -215,7 +215,7 @@ interface BanResult {
   presence_notified: boolean;
 }
 
-async function adminBanSlug(slug: string, env: Env): Promise<BanResult> {
+async function adminDeleteSlug(slug: string, env: Env): Promise<DeleteResult> {
   const now = Date.now();
 
   // 1. KV: drop the cached HTML. Capture whether it was present so we can
@@ -225,24 +225,18 @@ async function adminBanSlug(slug: string, env: Env): Promise<BanResult> {
     try {
       await env.ARTICLES.delete(slug);
     } catch (e) {
-      console.error("admin ban: KV delete failed", slug, e);
+      console.error("admin delete: KV delete failed", slug, e);
     }
   }
 
-  // 2. Moderation table: mark banned (upsert). Reason is fixed so it's
-  //    obvious in the DB later who decided this — distinct from the
-  //    "auto-flagged…" reasons the LLM sweep writes.
+  // 2. Moderation table: delete the record if it exists so it can be regenerated.
   try {
     await env.DB
-      .prepare(
-        `INSERT INTO article_moderation (slug, status, reason, enqueued_at, checked_at)
-         VALUES (?, 'banned', 'admin ban', ?, ?)
-         ON CONFLICT(slug) DO UPDATE SET status='banned', reason='admin ban', checked_at=excluded.checked_at`
-      )
-      .bind(slug, now, now)
+      .prepare("DELETE FROM article_moderation WHERE slug = ?")
+      .bind(slug)
       .run();
   } catch (e) {
-    console.error("admin ban: moderation upsert failed", slug, e);
+    console.error("admin delete: moderation delete failed", slug, e);
   }
 
   // 3. Top Folios: nuke the denormalized score row and every vote that
@@ -262,7 +256,7 @@ async function adminBanSlug(slug: string, env: Env): Promise<BanResult> {
       .run();
     articleRowDeleted = Number(r2.meta?.changes ?? 0) > 0;
   } catch (e) {
-    console.error("admin ban: articles delete failed", slug, e);
+    console.error("admin delete: articles delete failed", slug, e);
   }
 
   // 4. Comments + their votes. Order matters: votes first because of the
@@ -285,7 +279,7 @@ async function adminBanSlug(slug: string, env: Env): Promise<BanResult> {
       .run();
     commentsDeleted = Number(c2.meta?.changes ?? 0);
   } catch (e) {
-    console.error("admin ban: comments delete failed", slug, e);
+    console.error("admin delete: comments delete failed", slug, e);
   }
 
   // 5. __total counter (best-effort; only if it was actually present and
@@ -319,7 +313,7 @@ async function adminBanSlug(slug: string, env: Env): Promise<BanResult> {
     );
     presenceNotified = resp.ok;
   } catch (e) {
-    console.error("admin ban: presence notify failed", slug, e);
+    console.error("admin delete: presence notify failed", slug, e);
   }
 
   return {
@@ -390,7 +384,7 @@ export function createAdminApp() {
   /** Comprehensive ban. Body: { slug: string }. The slug is normalized
    *  with the same `slugify` the rest of the app uses, so the operator
    *  can paste either "Foo Bar" or "foo-bar". */
-  app.post("/api/admin/ban", async (c) => {
+  app.post("/api/admin/delete", async (c) => {
     let body: any;
     try {
       body = await c.req.json();
@@ -399,7 +393,7 @@ export function createAdminApp() {
     }
     const slug = slugify(String(body?.slug ?? ""));
     if (!slug) return c.json({ error: "missing or invalid slug" }, 400);
-    const result = await adminBanSlug(slug, c.env);
+    const result = await adminDeleteSlug(slug, c.env);
     return c.json(result);
   });
 
