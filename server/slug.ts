@@ -3,39 +3,28 @@
  * Must be deterministic and idempotent: slugify(slugify(x)) === slugify(x).
  */
 export function slugify(input: string): string {
-  return input
-    .normalize("NFC")
-    .normalize("NFKD")
-    .replace(/([a-zA-Z])[\u0300-\u036f]+/g, "$1") // strip combining diacritics ONLY from Latin
-    .normalize("NFC") // recombine Cyrillic (e.g. и + breve -> й)
-    .toLowerCase()
-    .replace(/['"`’]/g, "")
-    .replace(/[^a-zа-яё0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
+  let s = input.trim();
+  // Decode URL if it was encoded (e.g. %20 -> space), just in case we receive encoded inputs
+  try {
+    s = decodeURIComponent(s);
+  } catch (e) {
+    // Ignore malformed URIs
+  }
+  return s
+    .replace(/\s+/g, "_") // spaces to underscores
+    .replace(/["<>#%{}|\\^~[\]`]/g, "") // remove characters that are problematic in URLs/titles
     .slice(0, 200);
 }
 
 /**
  * Convert a slug back into a plausible human title.
- * "the-glass-bishops-of-novgorod-1247" -> "The Glass Bishops of Novgorod 1247"
- * The LLM can reshape punctuation (commas etc.) as it sees fit.
+ * "Римская_империя" -> "Римская империя"
  */
 export function slugToTitle(slug: string): string {
-  const small = new Set([
-    "a", "an", "and", "as", "at", "but", "by", "for", "in", "of",
-    "on", "or", "the", "to", "vs", "via", "with",
-  ]);
-  const words = slug.split("-").filter(Boolean);
-  
-  if (/[а-яё]/.test(slug)) {
-    const joined = words.join(" ");
-    return joined.charAt(0).toUpperCase() + joined.slice(1);
+  try {
+    slug = decodeURIComponent(slug);
+  } catch (e) {
+    // ignore
   }
-
-  return words
-    .map((w, i) => {
-      if (i !== 0 && small.has(w)) return w;
-      return w.charAt(0).toUpperCase() + w.slice(1);
-    })
-    .join(" ");
+  return slug.replace(/_/g, " ");
 }
