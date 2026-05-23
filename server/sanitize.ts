@@ -156,6 +156,43 @@ export interface LinkHint {
 
 export function extractLinkHints(rawHtml: string): LinkHint[] {
   const seen = new Map<string, string>(); // target → first/longest blurb in this article
+
+  // 1. Parse `<p>` blocks to use as fallback context when `context="..."` is missing
+  const pTagRe = /<p\b[^>]*>([\s\S]*?)<\/p>/gi;
+  let pMatch: RegExpExecArray | null;
+  while ((pMatch = pTagRe.exec(rawHtml)) !== null) {
+    const pInner = pMatch[1];
+    const pText = pInner.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+    
+    // Find all links inside this paragraph
+    const aTagRe = /<a\s+([^>]*)>/gi;
+    let aMatch: RegExpExecArray | null;
+    while ((aMatch = aTagRe.exec(pInner)) !== null) {
+      const attrs = aMatch[1];
+      const href = matchAttr(attrs, "href");
+      let ctx = matchAttr(attrs, "context");
+      
+      // Fallback to the whole paragraph text if no context attribute
+      if (!ctx && pText) {
+        ctx = pText;
+      }
+      
+      if (!href || !ctx) continue;
+      const target = hrefToSlug(href);
+      if (!target) continue;
+      
+      const cleaned = cleanBlurb(ctx);
+      if (!cleaned) continue;
+      
+      const prev = seen.get(target);
+      if (!prev || cleaned.length > prev.length) {
+        // give preference to longer context
+        seen.set(target, cleaned);
+      }
+    }
+  }
+
+  // 2. Also run the old logic for tags that might be outside <p> but have `context`
   const tagRe = /<a\s+([^>]*)>/gi;
   let m: RegExpExecArray | null;
   while ((m = tagRe.exec(rawHtml)) !== null) {
@@ -172,6 +209,7 @@ export function extractLinkHints(rawHtml: string): LinkHint[] {
       seen.set(target, cleaned);
     }
   }
+
   const out: LinkHint[] = [];
   for (const [targetSlug, blurb] of seen) {
     out.push({ targetSlug, blurb });

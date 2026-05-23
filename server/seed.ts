@@ -7,26 +7,26 @@
  * 
  * For dev reset with this: pnpm wrangler kv key delete --binding=ARTICLES --local --preview false "halupedia"
  */
-export const HOMEPAGE_ARTICLE = `<h1>Halupedia</h1>
-<p><strong>Halupedia</strong> is an encyclopedia covering topics that have received insufficient attention in mainstream reference works. Coverage spans historical events, scientific disciplines, geographical features, notable persons, organizations, treaties, academic disputes, and cultural phenomena. Articles are generated on demand and stored permanently upon first request.</p>
+export const HOMEPAGE_ARTICLE = `<h1>Халупедия</h1>
+<p><strong>Халупедия</strong> — это энциклопедия, освещающая темы, которым уделено недостаточно внимания в основных справочниках. Она охватывает исторические события, научные дисциплины, географические объекты, выдающихся личностей, организации, договоры, академические споры и культурные феномены. Статьи генерируются по запросу и навсегда сохраняются при первом же обращении к ним.</p>
 
-<p>The encyclopedia approaches all subjects with equal seriousness regardless of their prominence, scope, or the number of people aware of their existence. Entries follow standard encyclopedic structure and cite relevant scholarly literature throughout.</p>
+<p>Энциклопедия относится ко всем предметам с одинаковой серьезностью, независимо от их известности, масштаба или количества людей, подозревающих об их существовании. Статьи следуют стандартной энциклопедической структуре и повсеместно ссылаются на соответствующую научную литературу.</p>
 
-<h2>How it works</h2>
+<h2>Как это работает</h2>
 
-<p>Click any linked term inside an article to load its entry. New topics are documented at the moment of first access. Use the <strong>Stumble</strong> button in the header to navigate to a random existing article.</p>
+<p>Нажмите на любой термин в виде ссылки внутри статьи, чтобы загрузить её содержимое. Новые темы документируются в момент их первого посещения. Используйте кнопку <strong>Случайная статья</strong> в шапке сайта, чтобы перейти к любой из уже существующих записей.</p>
 
-<p>Minor inconsistencies between entries are a known characteristic of the encyclopedia and fall within acceptable tolerances.</p>
+<p>Незначительные противоречия между различными статьями являются известной особенностью энциклопедии и находятся в пределах допустимых погрешностей.</p>
 
-<h2>Suggested starting points</h2>
+<h2>Рекомендованные темы для начала</h2>
 
 <ul>
-<li><a href="/the-great-pigeon-census-of-1887">The Great Pigeon Census of 1887</a> &mdash; the six-year municipal effort to count every pigeon in Vienna, abandoned after the pigeons were counted twice and then went missing.</li>
-<li><a href="/the-ministry-of-slightly-wrong-maps">The Ministry of Slightly Wrong Maps</a> &mdash; a government agency established to produce maps with deliberate minor inaccuracies, for reasons that remain classified.</li>
-<li><a href="/the-ministry-of-terribly-wrong-maps">The Ministry of Terribly Wrong Maps</a> &mdash; a government agency established to produce maps with deliberate major inaccuracies, for reasons that remain classified.</li>
-<li><a href="/chaldic-arithmetic">Chaldic Arithmetic</a> &mdash; the branch of mathematics in which subtraction is forbidden and practitioners must instead negotiate with the number.</li>
-<li><a href="/the-national-library-of-unfinished-books">The National Library of Unfinished Books</a> &mdash; an institution dedicated to works their authors abandoned between 40% and 85% completion.</li>
-<li><a href="/the-society-for-the-prevention-of-unnecessary-tuesdays">The Society for the Prevention of Unnecessary Tuesdays</a> &mdash; a civic organization that successfully petitioned four municipalities to skip the day entirely.</li>
-<li><a href="/armund-the-river-mapper">Armund the River Mapper</a> &mdash; the cartographer who mapped 14,000 leagues of river system without ever leaving his chair, and was later sued by three of the rivers.</li>
-<li><a href="/the-year-without-tuesdays">The Year Without Tuesdays</a> &mdash; a calendrical anomaly recorded in four kingdoms and denied in a fifth.</li>
+<li><a href="/великая-голубиная-перепись-1887-года">Великая голубиная перепись 1887 года</a> &mdash; шестилетняя муниципальная кампания по подсчету каждого голубя в Вене, прекращенная после того, как голуби были посчитаны дважды, а затем куда-то пропали.</li>
+<li><a href="/министерство-слегка-неправильных-карт">Министерство слегка неправильных карт</a> &mdash; правительственное агентство, созданное для выпуска карт с преднамеренными мелкими неточностями по до сих пор засекреченным причинам.</li>
+<li><a href="/министерство-сильно-неправильных-карт">Министерство сильно неправильных карт</a> &mdash; правительственное агентство, созданное для выпуска карт с преднамеренными грубыми неточностями по до сих пор засекреченным причинам.</li>
+<li><a href="/халдийская-арифметика">Халдийская арифметика</a> &mdash; раздел математики, в котором вычитание строго запрещено, и практикующим вместо этого приходится вступать в переговоры с числом.</li>
+<li><a href="/национальная-библиотека-незаконченных-книг">Национальная библиотека незаконченных книг</a> &mdash; учреждение, посвященное трудам, которые их авторы забросили на этапе готовности от 40% до 85%.</li>
+<li><a href="/общество-по-предотвращению-лишних-вторников">Общество по предотвращению лишних вторников</a> &mdash; гражданская организация, которая успешно убедила четыре муниципалитета полностью пропускать этот день недели.</li>
+<li><a href="/армунд-картограф-рек">Армунд, картограф рек</a> &mdash; специалист, нанесший на карту 14 000 лье речных систем, ни разу не встав со стула, и впоследствии получивший судебный иск от трех рек.</li>
+<li><a href="/год-без-вторников">Год без вторников</a> &mdash; календарная аномалия, зафиксированная в четырех королевствах и отрицаемая в пятом.</li>
 </ul>`;
