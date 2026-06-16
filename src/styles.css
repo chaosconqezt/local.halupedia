@@ -165,6 +165,31 @@ a:hover {
   cursor: not-allowed;
 }
 
+/* ----------------------- Header action buttons ----------- */
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+.action-button:hover {
+  background: var(--blockquote-bg);
+  color: var(--ink);
+  border-color: var(--ink-soft);
+}
+.action-button-danger:hover {
+  background: rgba(122, 46, 31, 0.1);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 /* ----------------------- Search results page ------------- */
 
 .search-page {
@@ -558,312 +583,6 @@ a:hover {
   .nav { font-size: 0.7rem; gap: 0.9rem; }
 }
 
-/* ----------------------- Comments ------------------------- */
-
-.comments {
-  margin-top: 3.5rem;
-  padding-top: 1.5rem;
-  border-top: 2px solid var(--rule);
-}
-
-.comments-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  margin-bottom: 1rem;
-}
-.comments-sort {
-  display: inline-flex;
-  gap: 0.25rem;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  margin-left: auto;
-}
-.comments-sort-btn {
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 2px;
-  padding: 0.15rem 0.55rem;
-  color: var(--ink-fade);
-  cursor: pointer;
-  font-family: inherit;
-  font-size: inherit;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
-}
-.comments-sort-btn:hover:not(:disabled) {
-  color: var(--ink);
-  border-color: var(--rule);
-}
-.comments-sort-btn.active {
-  color: var(--ink);
-  border-color: var(--ink-soft);
-  background: var(--paper-soft, transparent);
-  cursor: default;
-}
-.comments-header h2 {
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: 1.4rem;
-  color: var(--ink-soft);
-  margin: 0;
-}
-.comments-count {
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-fade);
-}
-
-.comments-identity {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  font-size: 0.92rem;
-  margin-bottom: 0.8rem;
-  padding: 0.55rem 0.8rem;
-  background: var(--blockquote-bg);
-  border-left: 3px solid var(--accent);
-}
-.comments-identity-label {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-fade);
-}
-.comments-identity-name {
-  font-style: italic;
-  color: var(--ink);
-}
-.comments-identity-handle {
-  font-family: var(--mono);
-  font-size: 0.82rem;
-  color: var(--ink-fade);
-}
-
-.comments-identity-hint {
-  font-family: var(--mono);
-  font-size: 0.76rem;
-  color: var(--ink-fade);
-  margin: 0 0 0.8rem;
-}
-
-.comments-error {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid var(--accent);
-  background: rgba(122, 46, 31, 0.08);
-  color: var(--accent);
-  margin-bottom: 1rem;
-}
-
-.comments-status,
-.comments-empty {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  color: var(--ink-fade);
-  margin: 1rem 0;
-}
-
-.comments-loadmore {
-  display: flex;
-  justify-content: center;
-  margin: 1.25rem 0 0.5rem;
-  padding-top: 1rem;
-  border-top: 1px dotted var(--rule);
-}
-.comments-loadmore button {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-}
-
-/* ----- Composer ----- */
-
-.comment-composer {
-  margin: 0.5rem 0 1.5rem;
-}
-.comment-composer.compact {
-  margin: 0.6rem 0 0.6rem;
-}
-
-.comment-textarea {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  padding: 0.65rem 0.8rem;
-  font-family: var(--serif);
-  font-size: 1rem;
-  color: var(--ink);
-  resize: vertical;
-  min-height: 4.5rem;
-  line-height: 1.5;
-}
-.comment-textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-  background: #fff;
-}
-
-.comment-composer-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-top: 0.45rem;
-}
-
-.comment-counter {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  color: var(--ink-fade);
-  letter-spacing: 0.04em;
-}
-.comment-counter.over { color: var(--accent); }
-
-.comment-submit {
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  background: var(--ink);
-  color: var(--parchment);
-  border: 1px solid var(--ink);
-  padding: 0.45rem 0.95rem;
-  cursor: pointer;
-  border-radius: 1px;
-  transition: background 120ms ease, color 120ms ease;
-}
-.comment-submit:hover:not(:disabled) {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-.comment-submit:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* ----- List ----- */
-
-.comments-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.comments-list.nested {
-  margin-top: 0.6rem;
-}
-
-.comment {
-  margin: 0 0 0.9rem;
-  padding-top: 0.55rem;
-  border-top: 1px dotted rgba(182, 164, 126, 0.5);
-}
-.comments-list > .comment:first-child { border-top: none; padding-top: 0; }
-
-.comment-row {
-  display: flex;
-  gap: 0.55rem;
-  align-items: flex-start;
-}
-
-.vote {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0.1rem 0.25rem;
-  color: var(--ink-fade);
-  line-height: 1;
-  transition: color 120ms ease, transform 120ms ease;
-  flex-shrink: 0;
-}
-.vote:hover { color: var(--accent); transform: translateY(-1px); }
-.vote.voted { color: var(--accent); }
-.vote-arrow {
-  display: inline-block;
-  font-size: 0.95rem;
-}
-
-.comment-body { flex: 1; min-width: 0; }
-
-.comment-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.35rem;
-  font-family: var(--mono);
-  font-size: 0.74rem;
-  color: var(--ink-fade);
-  margin-bottom: 0.25rem;
-}
-.comment-meta .sep { opacity: 0.5; }
-.comment-author {
-  font-family: var(--serif);
-  font-size: 0.95rem;
-  font-style: italic;
-  color: var(--ink-soft);
-}
-.comment-handle { color: var(--ink-fade); }
-.comment-score { letter-spacing: 0.04em; }
-
-.comment-collapse {
-  background: transparent;
-  border: none;
-  font-family: var(--mono);
-  font-size: 0.74rem;
-  color: var(--ink-fade);
-  cursor: pointer;
-  padding: 0 0.15rem;
-}
-.comment-collapse:hover { color: var(--accent); }
-
-.comment-collapsed-count { font-style: italic; }
-
-.comment-text {
-  font-size: 0.98rem;
-  color: var(--ink);
-  line-height: 1.55;
-}
-.comment-text p {
-  margin: 0 0 0.55rem;
-  text-align: left;
-  hyphens: none;
-}
-.comment-text p:last-child { margin-bottom: 0; }
-
-.comment-actions {
-  margin-top: 0.3rem;
-  display: flex;
-  gap: 0.8rem;
-}
-.comment-link {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--ink-fade);
-  padding: 0;
-}
-.comment-link:hover { color: var(--accent); }
-
-@media (max-width: 600px) {
-  .comment { margin-left: 0 !important; }
-  .comments-list.nested {
-    border-left: 1px dotted var(--rule);
-    padding-left: 0.6rem;
-  }
-}
-
 /* ----------------------- All-entries index ------------------------- */
 
 .all-entries {
@@ -1030,11 +749,7 @@ a:hover {
    Sidebar / "Reader's column"  (frontend PoC, mock data)
    ==================================================================== */
 
-/* Two-column layout: main content + right sidebar. Comments are a sibling
-   of <main> (not a child) so we can place them independently in the grid.
-   Desktop reads article → comments down the left column, with the sidebar
-   sticky on the right spanning both rows. Below 980px everything stacks
-   and the order becomes article → sidebar → comments. */
+/* Two-column layout: main content + right sidebar. */
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 260px;
@@ -1043,38 +758,17 @@ a:hover {
 }
 
 .layout-main {
-  min-width: 0;     /* prevents long words from blowing out the grid */
-  max-width: 760px; /* preserve original reading measure */
+  min-width: 0;
+  max-width: 760px;
   grid-column: 1;
   grid-row: 1;
 }
 
-.layout > .comments {
-  grid-column: 1;
-  grid-row: 2;
-  /* match the article's reading measure so comments don't sprawl wider
-     than the body copy above them on desktop */
-  max-width: 760px;
-  min-width: 0;
-}
-
 .sidebar {
   position: sticky;
-  /* Anchor the rail to the *bottom* of the viewport rather than the top.
-     For sidebars taller than the viewport this gives the right UX:
-     the rail scrolls in lock-step with the article until its bottom
-     reaches the viewport bottom, then pins there so the article + comments
-     continue scrolling past it. With `top: 1rem` the top was pinned from
-     the first scroll tick, which meant the lower panels (Patronage / SOL
-     wallet) were never reachable without scrolling through the entire
-     article AND the comments first. */
   bottom: 1rem;
-  /* Span both content rows on desktop so the sticky rail aligns to the
-     top of the article and stays visible while the user scrolls past
-     the comments. `align-self: start` keeps the sticky behaviour intact
-     (a stretched item can't be sticky). */
   grid-column: 2;
-  grid-row: 1 / span 2;
+  grid-row: 1;
   align-self: start;
   display: flex;
   flex-direction: column;
@@ -1083,19 +777,12 @@ a:hover {
   color: var(--ink);
 }
 
-/* Mobile: collapse to a single column and reorder children so the visual
-   flow is article → sidebar → comments. This block MUST come after the
-   base .sidebar rule above; otherwise the desktop `grid-column: 2` wins
-   the cascade (equal specificity, source order) and the sidebar stays
-   pinned to the right column at every viewport — which is exactly the
-   bug that prompted this rewrite. */
 @media (max-width: 980px) {
   .layout {
     grid-template-columns: 1fr;
   }
   .layout-main        { grid-column: 1; grid-row: 1; }
   .sidebar            { grid-column: 1; grid-row: 2; }
-  .layout > .comments { grid-column: 1; grid-row: 3; max-width: none; }
 
   .sidebar {
     position: static;
@@ -1471,391 +1158,6 @@ a:hover {
   margin-top: 0.6rem;
 }
 
-/* --- Article vote: compact, vertical, sits to the left of the h1 ----- */
-
-/*
- * The vote element is absolutely positioned at the top-left of
- * `.article-frame`. The frame wraps the React-rendered <ArticleVote /> and
- * the streamed <article>. To carve out room for it we reserve left padding
- * on the article's first <h1> via a single selector — exactly as agreed:
- * a simple selector that matches the first h1 of the article.
- *
- * Tablets and below: the absolute positioning + h1 padding falls back to
- * a normal block flow above the title (see media query at the bottom).
- */
-
-.article-frame {
-  position: relative;
-}
-
-/* h1 left-padding only kicks in on votable articles. The homepage
-   ("/") shares the same wrapper for layout consistency but doesn't get
-   the vote button, so it must not waste 3.6rem on the title row. */
-.article-frame-votable .article > h1:first-of-type {
-  padding-left: 3.6rem;
-  min-height: 2.6rem;
-}
-
-.article-vote {
-  position: absolute;
-  top: 0.15rem;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
-  font-family: var(--mono);
-  z-index: 1;
-}
-
-.article-vote-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.05rem;
-  width: 2.8rem;
-  padding: 0.35rem 0.25rem;
-  background: transparent;
-  border: 1px solid var(--ink-soft);
-  border-radius: 2px;
-  cursor: pointer;
-  color: var(--ink-soft);
-  font-family: var(--mono);
-  line-height: 1;
-  transition: color 120ms ease, border-color 120ms ease,
-    background 120ms ease, transform 120ms ease;
-  font-feature-settings: "lnum", "tnum";
-}
-.article-vote-btn:hover:not(:disabled) {
-  color: var(--accent);
-  border-color: var(--accent);
-  transform: translateY(-1px);
-}
-.article-vote-btn:disabled {
-  opacity: 0.55;
-  cursor: progress;
-}
-.article-vote-btn.voted {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: var(--blockquote-bg);
-}
-
-.article-vote-arrow {
-  font-size: 0.95rem;
-  line-height: 1;
-}
-
-.article-vote-count {
-  font-size: 0.78rem;
-  font-weight: 600;
-  min-width: 1ch;
-  text-align: center;
-}
-
-/* The "Endorse / Endorsed" label is now visually redundant next to a
-   self-explanatory ▲+number pill; hide it but keep it in the DOM as
-   a screen-reader aid. */
-.article-vote-label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-}
-
-.article-vote-error {
-  font-size: 0.66rem;
-  font-style: italic;
-  color: #b85a3a;
-  max-width: 4rem;
-  text-align: center;
-  line-height: 1.2;
-}
-
-/* Narrow viewports: there's not enough horizontal room next to the h1
-   for the absolute-positioned button. Fall back to a stacked layout. */
-@media (max-width: 640px) {
-  .article-frame-votable .article > h1:first-of-type {
-    padding-left: 0;
-    min-height: 0;
-  }
-  .article-vote {
-    position: static;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 0.7rem;
-  }
-  .article-vote-btn {
-    flex-direction: row;
-    width: auto;
-    padding: 0.25rem 0.6rem;
-    gap: 0.4rem;
-  }
-}
-
-/* ====================================================================
-   Admin panel
-   ==================================================================== */
-
-.admin-panel {
-  max-width: 640px;
-  margin: 0 auto;
-  font-family: var(--serif);
-  color: var(--ink);
-}
-
-.admin-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: 0.75rem;
-  margin-bottom: 1.4rem;
-  border-bottom: 2px solid var(--rule);
-}
-.admin-header h1 {
-  margin: 0;
-  font-size: 1.7rem;
-  letter-spacing: 0.01em;
-}
-
-.admin-logout {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  background: transparent;
-  border: 1px solid var(--ink-soft);
-  color: var(--ink-soft);
-  padding: 0.35rem 0.75rem;
-  cursor: pointer;
-  border-radius: 1px;
-  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
-}
-.admin-logout:hover {
-  background: var(--ink-soft);
-  color: var(--parchment);
-}
-
-.admin-login,
-.admin-section {
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-
-.admin-section h2 {
-  margin: 0;
-  font-size: 1.25rem;
-}
-
-.admin-section-blurb {
-  margin: 0;
-  font-style: italic;
-  font-size: 0.92rem;
-  color: var(--ink-soft);
-  line-height: 1.5;
-}
-
-.admin-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-fade);
-}
-.admin-field input {
-  font-family: var(--serif);
-  font-size: 1rem;
-  letter-spacing: normal;
-  text-transform: none;
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  padding: 0.55rem 0.7rem;
-}
-.admin-field input:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: -1px;
-  background: rgba(255, 255, 255, 0.85);
-}
-
-.admin-submit {
-  align-self: flex-start;
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  background: var(--ink);
-  color: var(--parchment);
-  border: 1px solid var(--ink);
-  padding: 0.55rem 1.1rem;
-  cursor: pointer;
-  border-radius: 1px;
-  transition: background 120ms ease, border-color 120ms ease;
-}
-.admin-submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.admin-submit:hover:not(:disabled) {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.admin-submit-danger {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-.admin-submit-danger:hover:not(:disabled) {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
-}
-
-.admin-error {
-  margin: 0;
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  color: var(--accent);
-  background: rgba(122, 46, 31, 0.08);
-  border-left: 3px solid var(--accent);
-  padding: 0.55rem 0.8rem;
-}
-
-.admin-ban-form {
-  display: flex;
-  gap: 0.6rem;
-  align-items: stretch;
-}
-.admin-slug-input {
-  flex: 1;
-  min-width: 0;
-  font-family: var(--mono);
-  font-size: 0.95rem;
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  padding: 0.55rem 0.7rem;
-}
-.admin-slug-input:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: -1px;
-  background: rgba(255, 255, 255, 0.85);
-}
-.admin-ban-form .admin-submit {
-  align-self: stretch;
-  white-space: nowrap;
-}
-
-.admin-result {
-  margin-top: 0.4rem;
-  padding: 0.9rem 1rem;
-  background: rgba(122, 46, 31, 0.05);
-  border: 1px dashed rgba(122, 46, 31, 0.35);
-  border-radius: 2px;
-}
-.admin-result-headline {
-  margin: 0 0 0.6rem;
-  font-style: italic;
-}
-.admin-result-headline code {
-  font-family: var(--mono);
-  font-style: normal;
-  background: rgba(0, 0, 0, 0.05);
-  padding: 0.05rem 0.3rem;
-  border-radius: 2px;
-}
-.admin-result-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-}
-.admin-result-list strong {
-  color: var(--ink);
-  font-weight: 600;
-}
-
-@media (max-width: 600px) {
-  .admin-ban-form {
-    flex-direction: column;
-  }
-  .admin-ban-form .admin-submit {
-    align-self: flex-start;
-  }
-}
-
-/* ============================================================== */
-/*  Turnstile verification modal                                   */
-/*                                                                 */
-/*  Hard-to-miss centered modal with a dimmed backdrop. In         */
-/*  Managed/interaction-only production mode the widget itself     */
-/*  stays at 0×0 and the whole thing flashes in and out in         */
-/*  ~300 ms; only when CF demands an interactive challenge does    */
-/*  the checkbox actually render inside the card.                  */
-/* ============================================================== */
-
-.hp-turnstile-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(20, 16, 10, 0.55);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  /* Subtle fade so the modal doesn't pop jarringly. */
-  animation: hp-ts-fade 120ms ease-out;
-}
-@keyframes hp-ts-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.hp-turnstile-card {
-  background: var(--parchment);
-  border: 1px solid var(--ink);
-  border-radius: 6px;
-  padding: 1.5rem 1.75rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
-  font-family: var(--serif, Georgia, serif);
-  color: var(--ink);
-  width: min(420px, calc(100vw - 2rem));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  text-align: center;
-}
-.hp-turnstile-label {
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 600;
-  line-height: 1.35;
-}
-.hp-turnstile-widget {
-  min-height: 65px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
 /* --- Article images (lazy /img/<uuid>) ---------------------------- */
 .article-body img,
 .article img {
@@ -1866,76 +1168,6 @@ a:hover {
   border: 1px solid var(--rule, #d8d0bd);
   background: #f4ecd7;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-/* --- Admin: enrichment section ----------------------------------- */
-.admin-enrich-form {
-  display: flex;
-  gap: 0.75rem;
-  align-items: flex-end;
-  margin-bottom: 0.5rem;
-  flex-wrap: wrap;
-}
-.admin-enrich-form .admin-field {
-  flex: 0 1 180px;
-}
-.admin-empty {
-  font-style: italic;
-  opacity: 0.7;
-}
-.admin-candidates {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0;
-  border-top: 1px dashed var(--rule, #d8d0bd);
-  max-height: 420px;
-  overflow-y: auto;
-}
-.admin-candidate {
-  border-bottom: 1px dashed var(--rule, #d8d0bd);
-  padding: 0.45rem 0.25rem;
-}
-.admin-candidate label {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  cursor: pointer;
-}
-.admin-candidate input[type="checkbox"]:disabled + .admin-candidate-title,
-.admin-candidate input[type="checkbox"]:disabled ~ * {
-  opacity: 0.55;
-}
-.admin-candidate-title {
-  font-weight: 600;
-  flex: 1 1 auto;
-}
-.admin-candidate-slug {
-  font-family: var(--mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 0.85em;
-  opacity: 0.7;
-}
-.admin-candidate-score {
-  font-variant-numeric: tabular-nums;
-  font-size: 0.9em;
-  color: var(--accent, #8b6914);
-}
-.admin-candidate-flag {
-  font-size: 0.75em;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.1rem 0.4rem;
-  border: 1px dashed var(--rule, #d8d0bd);
-  border-radius: 2px;
-  opacity: 0.75;
-}
-.admin-candidate-flag-warn {
-  color: #8a3a1a;
-  border-color: #8a3a1a;
-}
-.admin-skipped {
-  font-style: italic;
-  opacity: 0.75;
 }
 
 
