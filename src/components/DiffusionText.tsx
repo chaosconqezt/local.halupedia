@@ -38,12 +38,15 @@ export const AnimatedText = ({ text }: { text: string }) => {
     if (changed) {
       animatingRef.current = true;
       lastTimeRef.current = performance.now();
+      if (!requestRef.current) {
+        requestRef.current = requestAnimationFrame(updateFrame);
+      }
     }
   }, [text]);
 
   const updateFrame = (time: number) => {
     if (!animatingRef.current) {
-        requestRef.current = requestAnimationFrame(updateFrame);
+        requestRef.current = undefined;
         return;
     }
 
