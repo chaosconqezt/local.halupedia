@@ -171,6 +171,7 @@ export function Article() {
             onClick={handleRegenerate} 
             className="action-button"
             title="Перегенерировать статью"
+            aria-label="Перегенерировать статью"
           >
             <RefreshCw size={18} />
           </button>
@@ -182,6 +183,7 @@ export function Article() {
                 onClick={handleDelete} 
                 className="action-button action-button-danger"
                 title="Да, удалить"
+                aria-label="Да, удалить"
                 style={{ padding: '0.2rem 0.6rem', fontSize: '0.8rem' }}
               >
                 Да
@@ -189,6 +191,7 @@ export function Article() {
               <button 
                 onClick={() => setConfirmDelete(false)} 
                 className="action-button"
+                aria-label="Отмена удаления"
                 style={{ padding: '0.2rem 0.6rem', fontSize: '0.8rem' }}
               >
                 Нет
@@ -199,6 +202,7 @@ export function Article() {
               onClick={() => setConfirmDelete(true)} 
               className="action-button action-button-danger"
               title="Удалить статью"
+              aria-label="Удалить статью"
             >
               <Trash2 size={18} />
             </button>
