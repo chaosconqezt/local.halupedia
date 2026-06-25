@@ -52,6 +52,7 @@ export function Header() {
           placeholder="Введите в меня..." 
           value={search}
           onChange={e => setSearch(e.target.value)}
+          aria-label="Поиск по статьям"
         />
         <button type="submit" className="header-search-submit">Искать</button>
       </form>
