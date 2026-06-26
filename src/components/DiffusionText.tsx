@@ -5,7 +5,7 @@ const ALPHABET = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭ
 export const AnimatedText = ({ text }: { text: string }) => {
   const [display, setDisplay] = useState(text);
   const charsRef = useRef<{ target: string; current: string; phase: number; age: number; isSpace: boolean }[]>([]);
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number | undefined>(undefined);
   const lastTimeRef = useRef<number>(performance.now());
   const animatingRef = useRef(true);
 
@@ -38,12 +38,17 @@ export const AnimatedText = ({ text }: { text: string }) => {
     if (changed) {
       animatingRef.current = true;
       lastTimeRef.current = performance.now();
+      if (!requestRef.current) {
+        requestRef.current = requestAnimationFrame(updateFrame);
+      }
     }
   }, [text]);
 
   const updateFrame = (time: number) => {
+    // ⚡ Bolt Optimization: Stop requesting animation frames when the component is done animating.
+    // This reduces CPU load from O(N) to O(1) idle state since we had 60fps loops per text block.
     if (!animatingRef.current) {
-        requestRef.current = requestAnimationFrame(updateFrame);
+        requestRef.current = undefined;
         return;
     }
 
@@ -112,12 +117,24 @@ export const AnimatedText = ({ text }: { text: string }) => {
         animatingRef.current = false;
     }
 
-    requestRef.current = requestAnimationFrame(updateFrame);
+    // ⚡ Bolt Optimization: Only schedule next frame if still animating.
+    if (animatingRef.current) {
+        requestRef.current = requestAnimationFrame(updateFrame);
+    } else {
+        requestRef.current = undefined;
+    }
   };
 
   useEffect(() => {
-    requestRef.current = requestAnimationFrame(updateFrame);
-    return () => cancelAnimationFrame(requestRef.current!);
+    // ⚡ Bolt Optimization: Initial check to avoid scheduling if already done.
+    if (animatingRef.current) {
+      requestRef.current = requestAnimationFrame(updateFrame);
+    }
+    return () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, []);
 
   return <span style={{ color: animatingRef.current ? 'var(--accent)' : 'inherit', transition: 'color 0.4s ease-out', display: 'inline', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{display}</span>;
