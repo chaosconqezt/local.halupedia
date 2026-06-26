@@ -5,7 +5,7 @@ const ALPHABET = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭ
 export const AnimatedText = ({ text }: { text: string }) => {
   const [display, setDisplay] = useState(text);
   const charsRef = useRef<{ target: string; current: string; phase: number; age: number; isSpace: boolean }[]>([]);
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number>(0);
   const lastTimeRef = useRef<number>(performance.now());
   const animatingRef = useRef(true);
 

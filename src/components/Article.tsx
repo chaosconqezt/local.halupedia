@@ -171,6 +171,7 @@ export function Article() {
             onClick={handleRegenerate} 
             className="action-button"
             title="Перегенерировать статью"
+            aria-label="Перегенерировать статью"
           >
             <RefreshCw size={18} />
           </button>
@@ -199,6 +200,7 @@ export function Article() {
               onClick={() => setConfirmDelete(true)} 
               className="action-button action-button-danger"
               title="Удалить статью"
+              aria-label="Удалить статью"
             >
               <Trash2 size={18} />
             </button>
